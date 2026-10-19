@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Puente Service · Reparación de PC en Comodoro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --hdr:#FFFFFF; --hdr-2:#0050A0; --hdr-ink:#0B2A52; --hdr-muted:#5A6E8A; --hdr-hover:#EEF4FB; --accent:#0050A0; --notice-bg:#E6EEF8; --notice-ink:#2A4468; --foot-bg:#F3F6FA; --foot-ink:#4A5E7C; --foot-h:#0B2A52; --search-line:#C9D6E6;
+  --blue:#0050A0; --blue-soft:#E6EEF8; --mp:#009EE3;
+  --bg:#F4F6F9; --surface:#FFFFFF; --surface-2:#F5F5F5;
+  --ink:#1F1F1F; --ink-2:#5C5C5C; --line:#E2E2E2;
+  --green:#00A650; --red:#D93025; --shadow:0 1px 2px rgba(0,0,0,.12);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121417; --surface:#1D2025; --surface-2:#262A30;
+    --ink:#ECECEC; --ink-2:#A8ADB4; --line:#30353C;
+    --blue:#5AA2F0; --blue-soft:#1C2A3B; --green:#3DCB7F; --red:#FF6B5E;
+    --shadow:0 1px 2px rgba(0,0,0,.5); color-scheme:dark; --hdr:#0F1B2E; --hdr-ink:#ECF2FA; --hdr-muted:#9DB0CA; --hdr-hover:rgba(255,255,255,.08); --notice-bg:#0A1424; --notice-ink:#C9D8EE; --foot-bg:#0F1B2E; --foot-ink:#A9BAD2; --foot-h:#FFFFFF; --search-line:#30353C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121417; --surface:#1D2025; --surface-2:#262A30;
+  --ink:#ECECEC; --ink-2:#A8ADB4; --line:#30353C;
+  --blue:#5AA2F0; --blue-soft:#1C2A3B; --green:#3DCB7F; --red:#FF6B5E;
+  --shadow:0 1px 2px rgba(0,0,0,.5); color-scheme:dark; --hdr:#0F1B2E; --hdr-ink:#ECF2FA; --hdr-muted:#9DB0CA; --hdr-hover:rgba(255,255,255,.08); --notice-bg:#0A1424; --notice-ink:#C9D8EE; --foot-bg:#0F1B2E; --foot-ink:#A9BAD2; --foot-h:#FFFFFF; --search-line:#30353C;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--notice-bg)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px}
+img{max-width:100%}
+.hidden{display:none!important}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+
+/* ---------- header ---------- */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--hdr);color:var(--hdr-ink);box-shadow:0 2px 12px rgba(0,40,90,.10)}
+.notice{background:var(--notice-bg);color:var(--notice-ink);font-size:12.5px;text-align:center;padding:6px 12px}
+.notice b{color:var(--hdr-ink)}
+.top-row{display:flex;align-items:center;gap:20px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--hdr-ink);flex-shrink:0}
+.brand-logo{height:46px;background:#fff;border-radius:8px;padding:4px 7px;border:1px solid var(--search-line)}
+.brand b{display:block;font-weight:800;font-size:16px;line-height:1.1}
+.brand small{display:block;font-size:12px;color:var(--hdr-muted)}
+.search{flex:1;display:flex;background:var(--surface);border:1.5px solid var(--search-line);border-radius:999px;min-width:0;max-width:640px;margin:0 auto;overflow:hidden}
+.search:focus-within{border-color:#0050A0}
+.search input{flex:1;border:0;padding:11px 18px;background:transparent;color:var(--ink);min-width:0}
+.search input:focus{outline:none}
+.search button{border:0;background:#0050A0;padding:0 20px;color:#fff}
+.search button:hover{background:#003F80}
+.nav-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.nav-btn{display:flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--hdr-ink);padding:8px 10px;border-radius:6px;text-decoration:none;font-size:14px}
+.nav-btn:hover{background:var(--hdr-hover)}
+.nav-btn.active{background:var(--hdr-hover);color:#0050A0;font-weight:700}
+.cart-count{background:#0050A0;color:#fff;font-size:12px;font-weight:700;border-radius:10px;min-width:20px;height:20px;display:inline-grid;place-items:center;padding:0 6px}
+.catnav{background:var(--hdr-2)}
+.catnav .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.catnav button{border:0;background:transparent;color:#E4EEFB;font-size:13.5px;font-weight:600;padding:11px 12px;white-space:nowrap;border-bottom:3px solid transparent}
+.catnav button:hover{color:#fff;background:rgba(255,255,255,.08)}
+.catnav button.on{color:#fff;border-bottom-color:#fff}
+
+/* ---------- login ---------- */
+.login{min-height:100%;display:grid;place-items:center;padding:32px 16px;background:linear-gradient(180deg,#E6EEF8 0%,var(--bg) 100%)}
+.login-card{width:100%;max-width:400px;background:var(--surface);border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.12);padding:28px}
+.login-logo{display:block;margin:0 auto 18px;width:220px;background:#fff;border-radius:10px;padding:10px}
+.login h1{font-size:22px;margin:0 0 4px;font-weight:700}
+.login p.lead{margin:0 0 20px;color:var(--ink-2)}
+.field{display:block;margin-bottom:14px}
+.field span{display:block;font-size:13px;margin-bottom:5px;color:var(--ink-2)}
+.field input,.field select{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:11px 12px}
+.field input:focus,.field select:focus{outline:2px solid var(--blue);outline-offset:-1px;border-color:transparent}
+.btn{border:0;border-radius:6px;padding:12px 18px;font-weight:600;font-size:15px}
+.btn-primary{background:#0050A0;color:#fff}
+.btn-primary:hover{background:#003F80}
+:root[data-theme="dark"] .btn-primary{background:#2F86E0}
+.btn-soft{background:var(--blue-soft);color:var(--blue)}
+.btn-ghost{background:transparent;color:var(--blue);padding:8px 10px}
+.btn-mp{background:var(--mp);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-block{width:100%}
+.err{color:var(--red);font-size:14px;margin:-4px 0 12px;min-height:20px}
+.hint{font-size:13px;color:var(--ink-2);margin-top:14px;text-align:center}
+.hint code{background:var(--surface-2);padding:1px 6px;border-radius:4px}
+
+/* ---------- store ---------- */
+main.wrap{padding-top:24px;padding-bottom:48px}
+.diag{background:var(--surface);border-radius:8px;box-shadow:var(--shadow);padding:22px;margin-bottom:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:24px;align-items:start}
+.diag h2{font-size:24px;line-height:1.2;margin:0 0 8px;font-weight:800;letter-spacing:-.01em}
+.diag p{margin:0;color:var(--ink-2);max-width:42ch}
+.symptoms{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.sym{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:14px;display:flex;align-items:center;gap:7px}
+.sym:hover{border-color:var(--blue)}
+.sym[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.plan{background:var(--surface-2);border-radius:8px;padding:16px;min-height:100%}
+.plan-empty{color:var(--ink-2);font-size:14px;display:grid;place-items:center;text-align:center;min-height:160px}
+.plan h3{margin:0 0 10px;font-size:16px}
+.plan ul{list-style:none;margin:0 0 12px;padding:0}
+.plan li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.plan li span:last-child{white-space:nowrap;font-weight:600}
+.plan-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.plan-total{font-size:22px;font-weight:700}
+.plan-total small{display:block;font-size:12px;font-weight:400;color:var(--ink-2)}
+
+.layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:20px}
+aside.filters h3{font-size:14px;margin:0 0 10px}
+.cat-list{list-style:none;margin:0 0 20px;padding:0}
+.cat-list button{border:0;background:transparent;text-align:left;width:100%;padding:6px 0;font-size:14px;color:var(--ink-2);display:flex;justify-content:space-between}
+.cat-list button:hover{color:var(--blue)}
+.cat-list button.on{color:var(--ink);font-weight:700}
+.cat-list em{font-style:normal;color:var(--ink-2);font-weight:400}
+.range{display:flex;gap:8px}
+.range input{width:100%;border:1px solid var(--line);border-radius:6px;padding:7px 8px;background:var(--surface)}
+.results-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.results-head h1{font-size:26px;margin:0;font-weight:800;letter-spacing:-.01em}
+.crumbs{font-size:13px;color:var(--ink-2);margin:0 0 6px}
+.crumbs a{color:var(--blue);text-decoration:none}
+.results-head p{margin:2px 0 0;font-size:13px;color:var(--ink-2)}
+.sort{display:flex;align-items:center;gap:8px;font-size:14px}
+.sort select{border:0;background:transparent;font-weight:600;color:var(--blue)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.card{background:var(--surface);border-radius:6px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;transition:box-shadow .15s}
+.card:hover{box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.thumb{aspect-ratio:4/3;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,var(--blue-soft),var(--surface) 70%);position:relative}
+.thumb svg{width:84px;height:84px}
+.avail{position:absolute;left:10px;top:10px;font-size:11.5px;font-weight:700;padding:4px 8px;border-radius:4px;background:var(--green);color:#fff}
+.avail.later{background:#E8A33D}
+.card-body{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}
+.card-cat{font-size:12px;color:var(--ink-2);margin-bottom:4px}
+.card h4{margin:0 0 10px;font-size:14.5px;font-weight:700;line-height:1.3;min-height:2.6em}
+.was{font-size:13px;color:var(--ink-2);text-decoration:line-through;margin-bottom:2px}
+.price{font-size:22px;font-weight:800;color:var(--blue);letter-spacing:-.01em;line-height:1.1}
+.price sup{font-size:12px;margin-left:1px}
+.cuotas{font-size:13px;color:var(--green);margin-top:4px}
+.unit{font-size:12px;color:var(--ink-2);margin-top:6px}
+.badge-full{font-size:12px;color:var(--green);font-weight:600;margin-top:6px}
+.card .btn{margin-top:auto}
+.card-actions{margin-top:14px;display:flex}
+.card-actions .btn{flex:1;padding:10px}
+.qty-inline{flex:1;display:flex;align-items:center;justify-content:space-between;background:var(--blue-soft);border-radius:6px}
+.qty-inline button{border:0;background:transparent;color:var(--blue);font-size:20px;width:42px;height:40px;font-weight:600}
+.qty-inline span{font-weight:700;color:var(--blue)}
+.empty{background:var(--surface);border-radius:8px;padding:40px;text-align:center;color:var(--ink-2)}
+
+/* ---------- cart ---------- */
+.cart-layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;align-items:start}
+.panel{background:var(--surface);border-radius:8px;box-shadow:var(--shadow)}
+.panel-head{padding:16px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center}
+.line{display:grid;grid-template-columns:52px minmax(0,1fr) auto auto;gap:14px;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.line:last-child{border-bottom:0}
+.line .mini{width:52px;height:52px;border:1px solid var(--line);border-radius:6px;display:grid;place-items:center}
+.line .mini svg{width:34px;height:34px}
+.line h5{margin:0;font-size:15px;font-weight:500}
+.line .meta{font-size:12px;color:var(--ink-2)}
+.line .rm{border:0;background:transparent;color:var(--blue);font-size:13px;padding:4px 0}
+.stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:6px}
+.stepper button{border:0;background:transparent;width:32px;height:32px;color:var(--blue);font-size:18px}
+.stepper span{min-width:26px;text-align:center;font-weight:600}
+.line-total{font-size:17px;min-width:96px;text-align:right}
+.summary{padding:20px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 160px)}
+.sum-row{display:flex;justify-content:space-between;padding:6px 0;font-size:15px}
+.sum-row.total{font-size:20px;font-weight:700;border-top:1px solid var(--line);margin-top:8px;padding-top:14px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px 0;font-size:14px}
+.opt input{margin-top:3px;accent-color:#0050A0}
+.mp-result{margin-top:16px;border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2)}
+.mp-result h4{margin:0 0 6px;font-size:15px;display:flex;align-items:center;gap:8px}
+.mp-link{display:flex;gap:6px;margin:10px 0}
+.mp-link input{flex:1;min-width:0;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--surface);font-size:13px}
+.qr{background:#fff;padding:10px;border-radius:8px;width:fit-content;margin:10px auto}
+details.json summary{cursor:pointer;color:var(--blue);font-size:13px;margin-top:8px}
+details.json pre{font-size:12px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px;overflow-x:auto;max-height:260px}
+
+/* ---------- admin ---------- */
+.admin-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.admin-head h1{margin:0;font-size:24px}
+.admin-head p{margin:4px 0 0;color:var(--ink-2)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--surface);border-radius:8px;box-shadow:var(--shadow);padding:14px 16px}
+.stat span{font-size:13px;color:var(--ink-2)}
+.stat b{display:block;font-size:22px;margin-top:2px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:end;padding:16px 20px;border-bottom:1px solid var(--line)}
+.toolbar .field{margin:0}
+.toolbar .grow{flex:1;min-width:180px}
+.bulk{display:flex;gap:6px;align-items:end;background:var(--blue-soft);padding:8px 10px;border-radius:8px}
+.bulk input{width:80px;border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface)}
+.bulk label{font-size:12px;color:var(--blue);display:block;margin-bottom:3px;font-weight:600}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;color:var(--ink-2);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
+td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr.changed td{background:color-mix(in srgb, #2F86E0 12%, transparent)}
+tr.off td{opacity:.5}
+td input.p{width:120px;border:1px solid var(--line);border-radius:6px;padding:7px 8px;text-align:right;background:var(--surface);font-variant-numeric:tabular-nums}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.delta{font-size:12px;font-weight:600}
+.delta.up{color:var(--green)} .delta.down{color:var(--red)}
+.switch{position:relative;width:38px;height:22px;display:inline-block}
+.switch input{opacity:0;width:0;height:0}
+.switch span{position:absolute;inset:0;background:var(--line);border-radius:999px;transition:.15s}
+.switch span::after{content:"";position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.switch input:checked+span{background:#0050A0}
+.switch input:checked+span::after{transform:translateX(16px)}
+.switch input:focus-visible+span{outline:3px solid var(--blue);outline-offset:2px}
+.savebar{position:sticky;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 20px;background:var(--surface);border-top:1px solid var(--line);border-radius:0 0 8px 8px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+.savebar span{font-size:14px;color:var(--ink-2)}
+.hours{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:16px 20px}
+.hours label{display:block;font-size:13px;color:var(--ink-2)}
+.hours input{width:100%;border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-top:4px;background:var(--surface)}
+
+.st{display:inline-block;font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--surface-2);text-transform:capitalize}
+.st-pagado{background:#DFF5E8;color:#0A7A3C}.st-rechazado,.st-cancelado{background:#FDE3E1;color:#B3261E}.st-pendiente{background:#FFF1D6;color:#8A5A00}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:#1F1F1F;color:#fff;padding:12px 18px;border-radius:8px;font-size:14px;opacity:0;transition:.2s;z-index:50;pointer-events:none;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid #0050A0;margin-top:32px;padding:36px 0 calc(24px + env(safe-area-inset-bottom,0px));font-size:14px}
+.fcols{display:grid;grid-template-columns:1.3fr repeat(3,1fr);gap:28px}
+.fcols h4{color:var(--foot-h);font-size:14px;margin:0 0 10px}
+.fcols ul{list-style:none;margin:0;padding:0}
+.fcols li{padding:3px 0}
+.fcols button{border:0;background:transparent;color:var(--foot-ink);padding:0;text-align:left}
+.fcols button:hover{color:var(--blue);text-decoration:underline}
+.flogo{background:#fff;border-radius:8px;padding:8px;border:1px solid var(--line);width:170px;display:block;margin-bottom:12px}
+.flegal{border-top:1px solid var(--line);margin-top:26px;padding-top:16px;font-size:12px;color:var(--ink-2);max-width:90ch}
+.pager{display:flex;justify-content:center;gap:6px;margin-top:22px;flex-wrap:wrap}
+.pager button{min-width:38px;height:38px;border:1px solid var(--line);background:var(--surface);border-radius:6px;font-weight:600}
+.pager button.on{background:#0050A0;border-color:#0050A0;color:#fff}
+.pager button:disabled{opacity:.4;cursor:default}
+.fbox{background:var(--surface);border-radius:8px;box-shadow:var(--shadow);padding:16px}
+.fbox+.fbox{margin-top:12px}
+.fbox h3{display:flex;justify-content:space-between;align-items:center}
+.fbox h3 button{border:0;background:transparent;color:var(--blue);font-size:12px}
+
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  aside.filters{display:none}
+  .cat-chips{display:flex!important}
+  .fcols{grid-template-columns:1fr 1fr}
+  .diag{grid-template-columns:1fr}
+  .cart-layout{grid-template-columns:1fr}
+  .summary{position:static}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .top-row{flex-wrap:wrap;gap:10px}
+  .search{order:3;flex-basis:100%}
+  .brand small{display:none}
+  .nav-btn .lbl{display:none}
+  .line{grid-template-columns:44px minmax(0,1fr);row-gap:10px}
+  .line .stepper{grid-column:2}
+  .line-total{grid-column:2;text-align:left}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .card-body{padding:12px}
+  .price{font-size:20px}
+}
+.cat-chips{display:none;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:6px;scrollbar-width:none}
+.cat-chips button{flex-shrink:0;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px}
+.cat-chips button.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="v-login" class="login hidden" aria-labelledby="login-title">
+  <form class="login-card" id="login-form" novalidate>
+    <img class="login-logo" src="/logo.png" alt="Proyecto Puente">
+    <h1 id="login-title">Ingresá como administrador</h1>
+    <p class="lead">Reparación y soporte de computadoras en Comodoro Rivadavia.</p>
+    <label class="field"><span>Usuario</span><input id="lg-user" autocomplete="username" required></label>
+    <label class="field"><span>Contraseña</span><input id="lg-pass" type="password" autocomplete="current-password" required></label>
+    <p class="err" id="lg-err" role="alert"></p>
+    <button class="btn btn-primary btn-block" type="submit">Ingresar</button>
+    <p class="hint">Acceso solo para administración. <button type="button" class="btn btn-ghost" id="lg-back" style="padding:0">Volver a la tienda</button></p>
+  </form>
+</section>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <header class="top">
+    <div class="notice">Servicio técnico en <b>Comodoro Rivadavia</b> · Lunes a viernes de 9 a 18 h · Retiro a domicilio en zona urbana</div>
+    <div class="wrap">
+      <div class="top-row">
+        <a class="brand" href="#/tienda" aria-label="Ir a la tienda">
+          <img class="brand-logo" src="/logo.png" alt="">
+          <span><b>Puente Service</b><small>Reparación de PC · Comodoro</small></span>
+        </a>
+        <form class="search" id="search-form" role="search">
+          <input id="q" type="search" placeholder="Buscar servicios, por ejemplo: pantalla, virus, Windows" aria-label="Buscar servicios">
+          <button type="submit" aria-label="Buscar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+        </form>
+        <nav class="nav-actions">
+          <a class="nav-btn" data-nav="admin" href="#/admin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg><span class="lbl">Precios</span></a>
+          <a class="nav-btn" data-nav="carrito" href="#/carrito" aria-label="Carrito"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><span class="cart-count" id="cart-count">0</span></a>
+          <button class="nav-btn" id="theme" title="Cambiar a tema oscuro" aria-label="Cambiar tema"><svg id="theme-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+          <button class="nav-btn" id="logout" title="Cerrar sesión"><span class="lbl">Salir</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></button>
+        </nav>
+      </div>
+    </div>
+    <nav class="catnav" aria-label="Categorías"><div class="wrap" id="catnav"></div></nav>
+  </header>
+
+  <!-- TIENDA -->
+  <main id="v-tienda" class="wrap hidden">
+    <section class="diag" aria-labelledby="diag-title">
+      <div>
+        <h2 id="diag-title">¿Qué le pasa a tu compu?</h2>
+        <p>Elegí uno o más síntomas y armamos el presupuesto con los servicios que suele llevar cada caso.</p>
+        <div class="symptoms" id="symptoms"></div>
+      </div>
+      <div class="plan" id="plan" aria-live="polite"></div>
+    </section>
+
+    <div class="layout">
+      <aside class="filters" aria-label="Filtros">
+        <div class="fbox"><h3>Categorías</h3><ul class="cat-list" id="cat-list" style="margin:0"></ul></div>
+        <div class="fbox"><h3>Precio <button id="price-reset">Reiniciar</button></h3>
+          <div class="range">
+            <input id="pmin" inputmode="numeric" placeholder="Mínimo" aria-label="Precio mínimo">
+            <input id="pmax" inputmode="numeric" placeholder="Máximo" aria-label="Precio máximo">
+          </div></div>
+        <div class="fbox"><h3>Disponibilidad</h3>
+          <label class="opt" style="padding:4px 0"><input type="checkbox" id="f-now"><span>Solo turno en el día</span></label></div>
+      </aside>
+      <section>
+        <div class="cat-chips" id="cat-chips"></div>
+        <div class="results-head">
+          <div><p class="crumbs"><a href="#/tienda" id="crumb-home">Inicio</a> / Servicios <span id="crumb-cat"></span></p><h1 id="res-title">Todos los servicios</h1><p id="res-count"></p></div>
+          <label class="sort">Ordenar por
+            <select id="sort"><option value="rel">Más relevantes</option><option value="asc">Menor precio</option><option value="desc">Mayor precio</option><option value="az">Nombre A–Z</option></select>
+          </label>
+        </div>
+        <div class="grid" id="grid"></div>
+        <div class="pager" id="pager"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- CARRITO -->
+  <main id="v-carrito" class="wrap hidden">
+    <div class="cart-layout">
+      <section class="panel" aria-labelledby="cart-title">
+        <div class="panel-head"><span id="cart-title">Carrito</span><button class="btn btn-ghost" id="cart-clear">Vaciar carrito</button></div>
+        <div id="cart-lines"></div>
+      </section>
+      <aside class="panel summary" aria-labelledby="sum-title">
+        <h2 id="sum-title" style="margin:0 0 12px;font-size:17px">Resumen de compra</h2>
+        <div id="sum-rows"></div>
+        <label class="opt"><input type="checkbox" id="opt-home"><span>Retiro y entrega a domicilio<br><small style="color:var(--ink-2)">Suma una visita técnica en zona urbana</small></span></label>
+        <label class="field" style="margin-top:4px"><span>Nombre del cliente</span><input id="cli-name" placeholder="Ej.: Juan Pérez"></label>
+        <label class="field"><span>Email para el comprobante</span><input id="cli-mail" type="email" placeholder="nombre@correo.com"></label>
+        <div class="sum-row total"><span>Total</span><span id="sum-total">$ 0</span></div>
+        <button class="btn btn-mp btn-block" id="mp-btn" style="margin-top:14px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c3-4 7-6 10-6s7 2 10 6c-3 4-7 6-10 6S5 16 2 12z"/><path d="M8 12h8"/></svg>
+          Generar link de Mercado Pago
+        </button>
+        <div id="mp-out"></div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- ADMIN -->
+  <main id="v-admin" class="wrap hidden">
+    <div class="admin-head">
+      <div><h1>Actualizar precios</h1><p>Los cambios se aplican a la tienda al guardar. Las filas modificadas quedan resaltadas.</p></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-soft" id="add-toggle">Agregar servicio</button>
+        <button class="btn btn-ghost" id="reset-all">Restaurar lista original</button>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+
+    <section class="panel hidden" id="add-panel" style="margin-bottom:16px">
+      <div class="panel-head">Nuevo servicio</div>
+      <form id="add-form" class="toolbar" style="border:0">
+        <label class="field grow"><span>Servicio</span><input id="n-name" required placeholder="Ej.: Cambio de pin de carga"></label>
+        <label class="field"><span>Categoría</span><select id="n-cat"></select></label>
+        <label class="field"><span>Precio (ARS)</span><input id="n-price" inputmode="numeric" required style="width:130px"></label>
+        <label class="field"><span>Unidad</span><input id="n-unit" value="Por equipo" style="width:150px"></label>
+        <button class="btn btn-primary" type="submit">Agregar</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="toolbar">
+        <label class="field grow"><span>Buscar</span><input id="a-q" type="search" placeholder="Nombre del servicio"></label>
+        <label class="field"><span>Categoría</span><select id="a-cat"></select></label>
+        <div class="bulk">
+          <div><label for="b-pct">Ajuste masivo %</label><input id="b-pct" inputmode="decimal" placeholder="Ej.: 8"></div>
+          <div><label for="b-round">Redondear a</label><select id="b-round" style="border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface)"><option value="1">Sin redondeo</option><option value="500">$ 500</option><option value="1000" selected>$ 1.000</option></select></div>
+          <button class="btn btn-primary" id="b-apply" style="padding:9px 14px">Aplicar a la vista</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Servicio</th><th>Categoría</th><th>Unidad</th><th style="text-align:right">Precio publicado</th><th style="text-align:right">Nuevo precio</th><th style="text-align:right">Variación</th><th>Visible</th></tr></thead>
+          <tbody id="a-body"></tbody>
+        </table>
+      </div>
+      <div class="savebar"><span id="dirty-msg">Sin cambios pendientes</span><div style="display:flex;gap:8px"><button class="btn btn-ghost" id="discard">Descartar</button><button class="btn btn-primary" id="save">Guardar cambios</button></div></div>
+    </section>
+
+    <section class="panel" style="margin-top:16px">
+      <div class="panel-head">Pedidos <button class="btn btn-ghost" onclick="loadOrders()">Actualizar</button></div>
+      <div id="orders"></div>
+    </section>
+
+    <section class="panel" style="margin-top:16px">
+      <div class="panel-head">Valor hora de referencia</div>
+      <div class="hours" id="hours"></div>
+    </section>
+  </main>
+
+  <footer class="site"><div class="wrap">
+    <div class="fcols">
+      <div><img class="flogo" src="/logo.png" alt="Proyecto Puente"><p style="margin:0;max-width:34ch">Reparación, mantenimiento y soporte de computadoras para hogares y empresas de Comodoro Rivadavia.</p></div>
+      <div><h4>Servicios</h4><ul id="f-cats"></ul></div>
+      <div><h4>Soporte</h4><ul><li><button data-go="carrito">Mi carrito</button></li><li><button data-go="admin">Actualizar precios</button></li><li><button data-quote="0">Seguimiento de reparación</button></li><li><button data-quote="0">Garantía del servicio</button></li></ul></div>
+      <div><h4>Contacto</h4><ul><li>Comodoro Rivadavia, Chubut</li><li>Lunes a viernes de 9 a 18 h</li><li>Sábados de 10 a 13 h</li><li>www.proyecto-puente.org</li></ul></div>
+    </div>
+    <p class="flegal" id="foot"></p>
+  </div></footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+let SEEDP = {};
+const LS = {
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const SS = {
+  get(k){try{return sessionStorage.getItem(k)}catch(e){return null}},
+  set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}},
+  del(k){try{sessionStorage.removeItem(k)}catch(e){}}
+};
+let mem = {auth:false};
+const clone = o => JSON.parse(JSON.stringify(o));
+let DB = {items:[],hours:[]};
+let cart = LS.get('pp_cart_v1', {});
+let draft = null;
+const state = {cat:'Todas', q:'', sort:'rel', sym:new Set(), page:1};
+const PER=12;
+const NOW_CATS=['Diagnóstico y evaluación','Software y aplicaciones','Optimización y seguridad','Redes y conectividad','Periféricos y dispositivos'];
+const isNow = i => NOW_CATS.includes(i.cat) || /remoto/i.test(i.name);
+const seedPrice = id => SEEDP[id];
+const $ = s => document.querySelector(s);
+const fmt = n => '$ ' + Math.round(n).toLocaleString('es-AR');
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const save = () => {LS.set('pp_cart_v1',cart)};
+async function api(path, opts={}){const r=await fetch(path,{credentials:'same-origin',headers:{'content-type':'application/json'},...opts});let d={};try{d=await r.json()}catch(e){}if(!r.ok) throw Object.assign(new Error(d.error||('Error '+r.status)),{status:r.status});return d;}
+const byId = id => DB.items.find(i=>i.id===id);
+const toast = m => {const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200)};
+
+/* category icons (stroke SVG, 24px grid) + tint */
+const ICON = {
+  "Diagnóstico y evaluación": "<rect x='4' y='8' width='44' height='32' rx='4' fill='#0050A0'/><rect x='8' y='12' width='36' height='24' rx='2' fill='#DCEBFB'/><path d='M12 30l6-8 5 5 6-10 6 13' fill='none' stroke='#2BB673' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/><rect x='20' y='40' width='12' height='6' fill='#7DA7D9'/><rect x='14' y='46' width='24' height='4' rx='2' fill='#0050A0'/><circle cx='44' cy='40' r='10' fill='#fff' stroke='#FFB020' stroke-width='4'/><path d='M51 47l8 8' stroke='#FFB020' stroke-width='5' stroke-linecap='round'/>",
+  "Sistema operativo e instalación": "<rect x='4' y='8' width='56' height='38' rx='4' fill='#0050A0'/><rect x='8' y='12' width='48' height='30' rx='2' fill='#DCEBFB'/><rect x='14' y='17' width='9' height='9' fill='#2F86E0'/><rect x='25' y='17' width='9' height='9' fill='#2F86E0'/><rect x='14' y='28' width='9' height='9' fill='#2F86E0'/><rect x='25' y='28' width='9' height='9' fill='#2F86E0'/><circle cx='46' cy='30' r='8' fill='#2BB673'/><path d='M46 25v9M42.5 30.5 46 34l3.5-3.5' fill='none' stroke='#fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/><rect x='26' y='46' width='12' height='6' fill='#7DA7D9'/><rect x='18' y='52' width='28' height='4' rx='2' fill='#0050A0'/>",
+  "Software y aplicaciones": "<rect x='6' y='6' width='23' height='23' rx='6' fill='#2F86E0'/><rect x='35' y='6' width='23' height='23' rx='6' fill='#FFB020'/><rect x='6' y='35' width='23' height='23' rx='6' fill='#2BB673'/><rect x='35' y='35' width='23' height='23' rx='6' fill='#DCEBFB' stroke='#0050A0' stroke-width='2.5' stroke-dasharray='4 3'/><path d='M46.5 40v13M40 46.5h13' stroke='#0050A0' stroke-width='3' stroke-linecap='round'/><path d='M13 17.5h9M17.5 13v9' stroke='#fff' stroke-width='3' stroke-linecap='round'/><circle cx='46.5' cy='17.5' r='5' fill='#fff'/><path d='M12 47l4 4 7-8' fill='none' stroke='#fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>",
+  "Optimización y seguridad": "<path d='M32 4 8 13v16c0 15 10 26 24 31 14-5 24-16 24-31V13z' fill='#0050A0'/><path d='M32 4v56c14-5 24-16 24-31V13z' fill='#2F86E0'/><path d='M21 31l8 8 15-16' fill='none' stroke='#fff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/>",
+  "Mantenimiento y limpieza": "<rect x='10' y='4' width='28' height='56' rx='4' fill='#0050A0'/><rect x='14' y='9' width='20' height='4' rx='2' fill='#7DA7D9'/><circle cx='24' cy='36' r='10' fill='#DCEBFB'/><path d='M24 36c0-6 5-7 6-5s-3 4-6 5c6 0 7 5 5 6s-4-3-5-6c0 6-5 7-6 5s3-4 6-5c-6 0-7-5-5-6s4 3 5 6z' fill='#2F86E0'/><circle cx='24' cy='36' r='2' fill='#0050A0'/><path d='M48 12v10M43 17h10M54 30v7M50.5 33.5h7M46 44v6M43 47h6' stroke='#FFB020' stroke-width='3' stroke-linecap='round'/>",
+  "Hardware y componentes": "<g stroke='#7DA7D9' stroke-width='3' stroke-linecap='round'><path d='M22 4v8M32 4v8M42 4v8M22 52v8M32 52v8M42 52v8M4 22h8M4 32h8M4 42h8M52 22h8M52 32h8M52 42h8'/></g><rect x='12' y='12' width='40' height='40' rx='5' fill='#0050A0'/><rect x='20' y='20' width='24' height='24' rx='3' fill='#FFB020'/><path d='M26 32h12M32 26v12' stroke='#fff' stroke-width='3' stroke-linecap='round'/><circle cx='17' cy='17' r='2' fill='#7DA7D9'/>",
+  "Almacenamiento y datos": "<rect x='6' y='10' width='52' height='16' rx='4' fill='#0050A0'/><rect x='6' y='30' width='52' height='16' rx='4' fill='#2F86E0'/><circle cx='48' cy='18' r='3' fill='#2BB673'/><circle cx='48' cy='38' r='3' fill='#2BB673'/><rect x='12' y='16' width='20' height='4' rx='2' fill='#7DA7D9'/><rect x='12' y='36' width='20' height='4' rx='2' fill='#DCEBFB'/><circle cx='32' cy='54' r='8' fill='#FFB020'/><path d='M32 50v7M29 54.5 32 57.5l3-3' fill='none' stroke='#fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/>",
+  "Redes y conectividad": "<path d='M12 20a28 28 0 0 1 40 0M19 27a18 18 0 0 1 26 0M26 34a8 8 0 0 1 12 0' fill='none' stroke='#2F86E0' stroke-width='4' stroke-linecap='round'/><path d='M14 42V36M50 42V36' stroke='#0050A0' stroke-width='4' stroke-linecap='round'/><rect x='6' y='42' width='52' height='16' rx='4' fill='#0050A0'/><circle cx='16' cy='50' r='2.5' fill='#2BB673'/><circle cx='24' cy='50' r='2.5' fill='#2BB673'/><circle cx='32' cy='50' r='2.5' fill='#FFB020'/><rect x='40' y='48' width='12' height='4' rx='2' fill='#7DA7D9'/>",
+  "Periféricos y dispositivos": "<rect x='2' y='26' width='42' height='24' rx='4' fill='#0050A0'/><g fill='#DCEBFB'><rect x='7' y='31' width='5' height='5' rx='1'/><rect x='15' y='31' width='5' height='5' rx='1'/><rect x='23' y='31' width='5' height='5' rx='1'/><rect x='31' y='31' width='5' height='5' rx='1'/><rect x='7' y='39' width='5' height='5' rx='1'/><rect x='31' y='39' width='5' height='5' rx='1'/><rect x='15' y='39' width='13' height='5' rx='1'/></g><path d='M23 26c0-8 10-6 10-14s14-4 14 4' fill='none' stroke='#7DA7D9' stroke-width='2.5' stroke-linecap='round'/><rect x='47' y='30' width='14' height='24' rx='7' fill='#2F86E0'/><path d='M54 30v8' stroke='#fff' stroke-width='2'/><rect x='52.5' y='33' width='3' height='5' rx='1.5' fill='#FFB020'/>",
+  "Servicios a domicilio y empresas": "<path d='M32 6 4 28h8v28h40V28h8z' fill='#0050A0'/><path d='M32 6 4 28h8L32 13l20 15h8z' fill='#2F86E0'/><rect x='20' y='30' width='24' height='16' rx='2' fill='#DCEBFB'/><rect x='29' y='46' width='6' height='4' fill='#7DA7D9'/><rect x='25' y='50' width='14' height='3' rx='1.5' fill='#DCEBFB'/><circle cx='50' cy='50' r='10' fill='#FFB020'/><path d='M46 50l3 3 5-6' fill='none' stroke='#fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/>",
+  "Gaming y alto rendimiento": "<path d='M18 16h28c9 0 14 8 14 20 0 12-3 18-9 18-5 0-7-6-11-9H24c-4 3-6 9-11 9-6 0-9-6-9-18 0-12 5-20 14-20z' fill='#0050A0'/><path d='M18 26v12M12 32h12' stroke='#DCEBFB' stroke-width='4' stroke-linecap='round'/><circle cx='44' cy='28' r='3.5' fill='#FFB020'/><circle cx='51' cy='34' r='3.5' fill='#2BB673'/><circle cx='37' cy='34' r='3.5' fill='#F25C54'/><circle cx='44' cy='40' r='3.5' fill='#2F86E0'/>"
+};
+const icon = c => `<svg viewBox="0 0 64 64" aria-hidden="true">${ICON[c]||ICON["Diagnóstico y evaluación"]}</svg>`;
+
+/* symptom -> service names */
+const SYMPTOMS = [
+ {k:'noenc',t:'No enciende',s:['Diagnóstico de no enciende','Cambio de fuente de alimentación PC']},
+ {k:'lenta',t:'Está lenta',s:['Optimización de inicio y rendimiento','Eliminación de programas no deseados','Instalación/cambio de disco HDD o SSD','Clonado de HDD/SSD a SSD']},
+ {k:'calor',t:'Se calienta o hace ruido',s:['Diagnóstico de sobrecalentamiento','Limpieza + pasta térmica notebook']},
+ {k:'virus',t:'Tiene virus o publicidad',s:['Análisis y limpieza de malware','Instalación de antivirus','Endurecimiento básico de seguridad']},
+ {k:'datos',t:'Perdí archivos',s:['Diagnóstico SMART de almacenamiento','Recuperación lógica básica de archivos']},
+ {k:'wifi',t:'No tengo internet',s:['Diagnóstico de problemas de Internet','Configuración de Wi-Fi/router']},
+ {k:'win',t:'Quiero formatear',s:['Respaldo de datos hasta 100 GB','Instalación limpia de Windows (licencia aparte)','Instalación de drivers']},
+ {k:'pant',t:'Pantalla rota',s:['Diagnóstico general de notebook','Cambio de pantalla de notebook']}
+];
+const findByName = n => DB.items.find(i=>i.name===n && i.active && i.price!=null);
+
+/* ---------- auth & routing ---------- */
+const isAuth = () => mem.auth;
+function route(){
+  const r = (location.hash.replace('#/','')||'tienda');
+  if(r==='admin' && !isAuth()){ show('login'); return; }
+  if(r==='login'){ show(isAuth()?'admin':'login'); return; }
+  show(['tienda','carrito','admin'].includes(r)?r:'tienda');
+}
+function show(v){
+  $('#v-login').classList.toggle('hidden', v!=='login');
+  $('#app').classList.toggle('hidden', v==='login');
+  ['tienda','carrito','admin'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
+  document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active',a.dataset.nav===v));
+  if(v==='login'){ setTimeout(()=>$('#lg-user').focus(),30); return; }
+  renderCats();
+  if(v==='tienda') renderStore();
+  if(v==='carrito') renderCart();
+  if(v==='admin') renderAdmin();
+  renderCount(); window.scrollTo(0,0);
+}
+$('#login-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const u=$('#lg-user').value.trim(), p=$('#lg-pass').value;
+  api('/api/login',{method:'POST',body:JSON.stringify({user:u,pass:p})})
+   .then(()=>{mem.auth=true;$('#lg-err').textContent='';$('#lg-pass').value='';authUI();location.hash='#/admin';route();toast('Sesión iniciada')})
+   .catch(err=>{$('#lg-err').textContent=err.message||'No se pudo iniciar sesión.'});
+});
+$('#lg-back').onclick=()=>{location.hash='#/tienda'};
+function authUI(){$('#logout .lbl').textContent=mem.auth?'Salir':'Ingresar';$('#logout').title=mem.auth?'Cerrar sesión':'Ingresar como administrador';}
+$('#logout').onclick=async()=>{ if(!mem.auth){location.hash='#/admin';return;} try{await api('/api/logout',{method:'POST'})}catch(e){} mem.auth=false;authUI();location.hash='#/tienda';route();toast('Sesión cerrada')};
+window.addEventListener('hashchange',route);
+
+/* ---------- store ---------- */
+const cats = () => [...new Set(DB.items.map(i=>i.cat))];
+function visible(){
+  let l = DB.items.filter(i=>i.active);
+  if(state.cat!=='Todas') l=l.filter(i=>i.cat===state.cat);
+  if(state.q){const q=norm(state.q).split(/\s+/);l=l.filter(i=>q.every(w=>norm(i.name+' '+i.cat).includes(w)))}
+  const mn=parseFloat($('#pmin').value.replace(/\D/g,''))||0, mx=parseFloat($('#pmax').value.replace(/\D/g,''))||Infinity;
+  l=l.filter(i=>i.price==null? mn===0 : i.price>=mn && i.price<=mx);
+  if($('#f-now').checked) l=l.filter(isNow);
+  const s=state.sort;
+  if(s==='asc') l.sort((a,b)=>(a.price??1e12)-(b.price??1e12));
+  if(s==='desc') l.sort((a,b)=>(b.price??-1)-(a.price??-1));
+  if(s==='az') l.sort((a,b)=>a.name.localeCompare(b.name,'es'));
+  return l;
+}
+function renderCats(){
+  const all=DB.items.filter(i=>i.active), list=['Todas',...cats()];
+  const cnt=c=>c==='Todas'?all.length:all.filter(i=>i.cat===c).length;
+  $('#cat-list').innerHTML=list.map(c=>`<li><button class="${c===state.cat?'on':''}" data-cat="${esc(c)}">${esc(c)} <em>${cnt(c)}</em></button></li>`).join('');
+  $('#catnav').innerHTML=list.map(c=>`<button class="${c===state.cat?'on':''}" data-cat="${esc(c)}">${c==='Todas'?'Todos los servicios':esc(c)}</button>`).join('');
+  $('#f-cats').innerHTML=cats().map(c=>`<li><button data-cat="${esc(c)}">${esc(c)}</button></li>`).join('');
+}
+function cardHTML(i){
+  const q=cart[i.id]||0;
+  const price = i.price==null ? `<div class="price" style="font-size:19px">A cotizar</div>` :
+    `${seedPrice(i.id)>i.price?`<div class="was">${fmt(seedPrice(i.id))}</div>`:''}<div class="price">${fmt(i.price)}</div><div class="cuotas">3 cuotas sin interés de ${fmt(i.price/3)}</div>`;
+  const act = i.price==null ? `<button class="btn btn-soft" data-quote="${i.id}">Consultar</button>` :
+    q ? `<div class="qty-inline"><button data-dec="${i.id}" aria-label="Quitar uno">−</button><span>${q} en carrito</span><button data-inc="${i.id}" aria-label="Agregar uno">+</button></div>` :
+        `<button class="btn btn-primary" data-inc="${i.id}">Agregar al carrito</button>`;
+  return `<article class="card"><div class="thumb">${i.price==null?'':isNow(i)?'<span class="avail">Turno en el día</span>':'<span class="avail later">Disponible en 24/48 h</span>'}${icon(i.cat)}</div><div class="card-body">
+    <div class="card-cat">${esc(i.cat)}</div><h4>${esc(i.name)}</h4>${price}
+    <div class="unit">${esc(i.unit||'')}</div>
+    <div class="card-actions">${act}</div></div></article>`;
+}
+function renderStore(){
+  renderCats(); renderSymptoms();
+  const l=visible();
+  $('#res-title').textContent = state.q ? `Resultados para “${state.q}”` : (state.cat==='Todas'?'Todos los servicios':state.cat);
+  $('#res-count').textContent = `${l.length} ${l.length===1?'servicio':'servicios'} · precios orientativos, no incluyen repuestos ni licencias`;
+  $('#crumb-cat').textContent = state.cat==='Todas'?'':'/ '+state.cat;
+  const pages=Math.max(1,Math.ceil(l.length/PER)); if(state.page>pages) state.page=pages;
+  const pg=l.slice((state.page-1)*PER,state.page*PER);
+  $('#pager').innerHTML = pages>1 ? `<button data-page="${state.page-1}" ${state.page===1?'disabled':''} aria-label="Página anterior">‹</button>`+Array.from({length:pages},(_,k)=>`<button data-page="${k+1}" class="${k+1===state.page?'on':''}">${k+1}</button>`).join('')+`<button data-page="${state.page+1}" ${state.page===pages?'disabled':''} aria-label="Página siguiente">›</button>` : '';
+  $('#grid').innerHTML = l.length ? pg.map(cardHTML).join('') : `<div class="empty" style="grid-column:1/-1">No hay servicios con esos filtros. Probá con otra palabra o elegí “Todas”.</div>`;
+}
+function renderSymptoms(){
+  $('#symptoms').innerHTML=SYMPTOMS.map(s=>`<button class="sym" aria-pressed="${state.sym.has(s.k)}" data-sym="${s.k}">${esc(s.t)}</button>`).join('');
+  const names=[...new Set([...state.sym].flatMap(k=>SYMPTOMS.find(s=>s.k===k).s))];
+  const items=names.map(findByName).filter(Boolean);
+  if(!items.length){ $('#plan').innerHTML='<div class="plan-empty">Tu presupuesto armado aparece acá.<br>Elegí un síntoma para empezar.</div>'; return; }
+  const tot=items.reduce((a,i)=>a+i.price,0);
+  $('#plan').innerHTML=`<h3>Presupuesto sugerido</h3><ul>${items.map(i=>`<li><span>${esc(i.name)}</span><span>${fmt(i.price)}</span></li>`).join('')}</ul>
+   <div class="plan-foot"><div class="plan-total">${fmt(tot)}<small>${items.length} servicios · mano de obra</small></div><button class="btn btn-primary" id="plan-add">Agregar todo al carrito</button></div>`;
+  $('#plan-add').onclick=()=>{items.forEach(i=>cart[i.id]=(cart[i.id]||0)||1);save();renderStore();renderCount();toast(`${items.length} servicios agregados al carrito`)};
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button'); if(!t) return;
+  if(t.dataset.cat){state.cat=t.dataset.cat;state.page=1;if(location.hash!=='#/tienda'&&location.hash!==''){location.hash='#/tienda'}else{renderStore();window.scrollTo({top:0})}}
+  if(t.dataset.page){state.page=+t.dataset.page;renderStore();$('#res-title').scrollIntoView({block:'start'})}
+  if(t.dataset.go){location.hash='#/'+t.dataset.go}
+  if(t.dataset.sym){const k=t.dataset.sym;state.sym.has(k)?state.sym.delete(k):state.sym.add(k);renderSymptoms()}
+  if(t.dataset.inc){const id=+t.dataset.inc;const was=cart[id]||0;cart[id]=was+1;save();refresh();if(!was)toast('Agregado al carrito')}
+  if(t.dataset.dec){const id=+t.dataset.dec;cart[id]=(cart[id]||0)-1;if(cart[id]<=0)delete cart[id];save();refresh()}
+  if(t.dataset.rm){delete cart[+t.dataset.rm];save();refresh();toast('Servicio quitado')}
+  if(t.dataset.quote){toast('Te contactamos para cotizar este servicio')}
+});
+function refresh(){renderCount(); if(!$('#v-tienda').classList.contains('hidden'))renderStore(); if(!$('#v-carrito').classList.contains('hidden'))renderCart()}
+$('#search-form').addEventListener('submit',e=>{e.preventDefault();state.q=$('#q').value.trim();state.cat='Todas';if(location.hash!=='#/tienda')location.hash='#/tienda';else renderStore()});
+$('#q').addEventListener('input',()=>{state.q=$('#q').value.trim();state.page=1;if(!$('#v-tienda').classList.contains('hidden'))renderStore()});
+$('#sort').onchange=e=>{state.sort=e.target.value;state.page=1;renderStore()};
+['#pmin','#pmax'].forEach(s=>$(s).addEventListener('input',()=>{state.page=1;renderStore()}));
+$('#f-now').onchange=()=>{state.page=1;renderStore()};
+$('#price-reset').onclick=()=>{$('#pmin').value='';$('#pmax').value='';state.page=1;renderStore()};
+function renderCount(){$('#cart-count').textContent=Object.values(cart).reduce((a,b)=>a+b,0)}
+
+/* ---------- cart ---------- */
+const VISIT = () => DB.items.find(i=>i.name.startsWith('Visita técnica a domicilio'));
+function cartLines(){return Object.entries(cart).map(([id,q])=>({i:byId(+id),q})).filter(x=>x.i&&x.i.price!=null)}
+function totals(){
+  const lines=cartLines(); const sub=lines.reduce((a,x)=>a+x.i.price*x.q,0);
+  const home=$('#opt-home').checked && lines.length ? (VISIT()?.price||0) : 0;
+  return {lines,sub,home,total:sub+home};
+}
+function renderCart(){
+  const {lines,sub,home,total}=totals();
+  $('#cart-title').textContent=`Carrito (${lines.reduce((a,x)=>a+x.q,0)})`;
+  $('#cart-lines').innerHTML = lines.length ? lines.map(({i,q})=>`<div class="line">
+    <div class="mini">${icon(i.cat)}</div>
+    <div><h5>${esc(i.name)}</h5><div class="meta">${esc(i.unit||'')} · ${fmt(i.price)} c/u</div><button class="rm" data-rm="${i.id}">Eliminar</button></div>
+    <div class="stepper"><button data-dec="${i.id}" aria-label="Quitar uno">−</button><span>${q}</span><button data-inc="${i.id}" aria-label="Agregar uno">+</button></div>
+    <div class="line-total">${fmt(i.price*q)}</div></div>`).join('')
+    : `<div class="empty">Tu carrito está vacío.<br><br><a class="btn btn-primary" href="#/tienda" style="text-decoration:none;display:inline-block">Ver servicios</a></div>`;
+  $('#sum-rows').innerHTML = `<div class="sum-row"><span>Servicios (${lines.length})</span><span>${fmt(sub)}</span></div>`+
+    (home?`<div class="sum-row"><span>Visita a domicilio</span><span>${fmt(home)}</span></div>`:'')+
+    `<div class="sum-row" style="color:var(--green)"><span>En 3 cuotas sin interés</span><span>${fmt(total/3)}</span></div>`;
+  $('#sum-total').textContent=fmt(total);
+  $('#mp-btn').disabled=!lines.length; $('#mp-btn').style.opacity=lines.length?1:.5;
+  $('#mp-out').innerHTML='';
+}
+$('#opt-home').onchange=renderCart;
+$('#cart-clear').onclick=()=>{cart={};save();refresh()};
+$('#mp-btn').onclick=async()=>{
+  const {lines}=totals(); if(!lines.length) return;
+  const btn=$('#mp-btn'); btn.disabled=true; const old=btn.innerHTML; btn.textContent='Generando link…';
+  let res;
+  try{ res=await api('/api/checkout',{method:'POST',body:JSON.stringify({items:lines.map(x=>({id:x.i.id,q:x.q})),home:$('#opt-home').checked,name:$('#cli-name').value,email:$('#cli-mail').value})}); }
+  catch(e){ toast(e.message); btn.disabled=false; btn.innerHTML=old; return; }
+  btn.disabled=false; btn.innerHTML=old;
+  const ref=res.id, total=res.total, link=res.link, pref=res.preference;
+  $('#mp-out').innerHTML=`<div class="mp-result">
+    <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><path d="m5 12 5 5 9-10"/></svg>Link generado · ${fmt(total)}</h4>
+    <div style="font-size:13px;color:var(--ink-2)">Pedido ${ref} guardado. ${res.mode==='demo'?'Link de demostración: falta cargar MP_ACCESS_TOKEN en Vercel para cobrar de verdad.':res.mode==='prueba'?'Link de Mercado Pago en modo prueba.':'Link de pago real de Mercado Pago.'}</div>
+    ${res.mode!=='demo'?`<a class="btn btn-mp btn-block" style="margin-top:10px;text-decoration:none" href="${esc(link)}">Pagar ahora</a>`:''}
+    <div class="mp-link"><input readonly value="${esc(link)}" aria-label="Link de pago" id="mp-link"><button class="btn btn-soft" id="mp-copy" style="padding:8px 12px">Copiar</button></div>
+    <div class="qr" id="mp-qr"></div>
+    <details class="json"><summary>Ver preferencia (POST /checkout/preferences)</summary><pre>${esc(JSON.stringify(pref,null,2))}</pre></details></div>`;
+  try{ new QRCode($('#mp-qr'),{text:link,width:150,height:150}); }catch(e){ $('#mp-qr').remove(); }
+  $('#mp-copy').onclick=async()=>{try{await navigator.clipboard.writeText(link);toast('Link copiado')}catch(e){$('#mp-link').select();toast('Seleccioná y copiá el link')}};
+};
+
+/* ---------- admin ---------- */
+const aState={q:'',cat:'Todas'};
+function ensureDraft(){ if(!draft) draft=clone(DB); }
+function aVisible(){
+  return draft.items.filter(i=>(aState.cat==='Todas'||i.cat===aState.cat)&&(!aState.q||norm(i.name).includes(norm(aState.q))));
+}
+function dirtyCount(){ return draft.items.filter(d=>{const o=byId(d.id);return !o||o.price!==d.price||o.active!==d.active}).length + (JSON.stringify(draft.hours)!==JSON.stringify(DB.hours)?1:0) }
+function renderAdmin(){
+  ensureDraft();
+  const opts=['Todas',...cats()].map(c=>`<option ${c===aState.cat?'selected':''}>${esc(c)}</option>`).join('');
+  $('#a-cat').innerHTML=opts; $('#n-cat').innerHTML=cats().map(c=>`<option>${esc(c)}</option>`).join('');
+  const priced=DB.items.filter(i=>i.price!=null);
+  const avg=priced.reduce((a,i)=>a+i.price,0)/priced.length;
+  const base=Object.values(SEEDP).filter(v=>v!=null), baseAvg=base.length?base.reduce((a,v)=>a+v,0)/base.length:avg;
+  const chg=((avg/baseAvg)-1)*100;
+  $('#stats').innerHTML=`<div class="stat"><span>Servicios publicados</span><b>${DB.items.filter(i=>i.active).length}</b></div>
+   <div class="stat"><span>Categorías</span><b>${cats().length}</b></div>
+   <div class="stat"><span>Precio promedio</span><b>${fmt(avg)}</b></div>
+   <div class="stat"><span>Variación vs. lista Excel</span><b style="color:${chg>0.05?'var(--green)':chg<-0.05?'var(--red)':'inherit'}">${chg>=0?'+':''}${chg.toFixed(1)}%</b></div>`;
+  renderRows(); renderHours(); updateDirty(); loadOrders();
+}
+async function loadOrders(){
+  const box=$('#orders'); box.innerHTML='<div class="empty" style="box-shadow:none">Cargando pedidos…</div>';
+  try{const {orders}=await api('/api/orders');
+    box.innerHTML=orders.length?`<div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Servicios</th><th style="text-align:right">Total</th><th>Estado</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${esc(o.id)}</td><td style="white-space:nowrap">${new Date(o.createdAt).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'})}</td><td>${esc(o.name||'—')}<br><small style="color:var(--ink-2)">${esc(o.email||'')}</small></td><td style="font-size:13px">${o.lines.map(l=>esc(l.title)+(l.quantity>1?' ×'+l.quantity:'')).join('<br>')}</td><td class="num">${fmt(o.total)}</td><td><span class="st st-${esc(o.status)}">${esc(o.status)}</span>${o.mode==='demo'?' <small style="color:var(--ink-2)">demo</small>':''}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty" style="box-shadow:none">Todavía no hay pedidos. Se crean cuando alguien genera un link de pago desde el carrito.</div>';
+  }catch(e){box.innerHTML=`<div class="empty" style="box-shadow:none">${esc(e.message)}</div>`}
+}
+function renderRows(){
+  $('#a-body').innerHTML=aVisible().map(d=>{
+    const o=byId(d.id), op=o?.price, ch=!o||op!==d.price||o.active!==d.active;
+    const dl=(op&&d.price!=null)?((d.price/op)-1)*100:null;
+    return `<tr class="${ch?'changed':''} ${d.active?'':'off'}">
+      <td>${esc(d.name)}</td><td style="color:var(--ink-2)">${esc(d.cat)}</td><td style="color:var(--ink-2);font-size:13px">${esc(d.unit||'')}</td>
+      <td class="num">${op!=null?fmt(op):(o?'A cotizar':'Nuevo')}</td>
+      <td class="num"><input class="p" data-pid="${d.id}" inputmode="numeric" value="${d.price??''}" placeholder="A cotizar" aria-label="Nuevo precio de ${esc(d.name)}"></td>
+      <td class="num">${dl!=null&&Math.abs(dl)>=.05?`<span class="delta ${dl>0?'up':'down'}">${dl>0?'+':''}${dl.toFixed(1)}%</span>`:'<span style="color:var(--ink-2)">—</span>'}</td>
+      <td><label class="switch"><input type="checkbox" data-act="${d.id}" ${d.active?'checked':''} aria-label="Visible en tienda"><span></span></label></td></tr>`}).join('')
+    || `<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--ink-2)">Ningún servicio coincide con la búsqueda.</td></tr>`;
+}
+function renderHours(){
+  $('#hours').innerHTML=draft.hours.map((h,k)=>`<label>${esc(h.t)}<input data-h="${k}" inputmode="numeric" value="${h.v}"><small style="display:block;margin-top:4px">${esc(h.n||'')}</small></label>`).join('');
+}
+function updateDirty(){const n=dirtyCount();$('#dirty-msg').textContent=n?`${n} ${n===1?'cambio pendiente':'cambios pendientes'}`:'Sin cambios pendientes';$('#save').disabled=!n;$('#save').style.opacity=n?1:.5}
+$('#a-body').addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset.pid){const d=draft.items.find(i=>i.id===+t.dataset.pid);const v=t.value.replace(/\D/g,'');d.price=v?+v:null;renderRows();updateDirty()}
+  if(t.dataset.act){draft.items.find(i=>i.id===+t.dataset.act).active=t.checked;renderRows();updateDirty()}
+});
+$('#hours').addEventListener('change',e=>{const k=e.target.dataset.h;if(k!=null){draft.hours[k].v=+e.target.value.replace(/\D/g,'')||0;updateDirty()}});
+$('#a-q').oninput=e=>{aState.q=e.target.value;renderRows()};
+$('#a-cat').onchange=e=>{aState.cat=e.target.value;renderRows()};
+$('#b-apply').onclick=()=>{
+  const p=parseFloat(($('#b-pct').value||'').replace(',','.')); if(isNaN(p)){toast('Escribí un porcentaje, por ejemplo 8 o -5');return}
+  const r=+$('#b-round').value; const l=aVisible().filter(d=>d.price!=null);
+  l.forEach(d=>{const o=byId(d.id);const base=o?.price??d.price;d.price=Math.round(base*(1+p/100)/r)*r});
+  renderRows();updateDirty();toast(`Ajuste de ${p>0?'+':''}${p}% aplicado a ${l.length} servicios`);
+};
+$('#save').onclick=async()=>{const n=dirtyCount();$('#save').disabled=true;try{DB=await api('/api/catalog',{method:'PUT',body:JSON.stringify({items:draft.items,hours:draft.hours})});draft=null;renderAdmin();toast(`Guardado: ${n} ${n===1?'cambio':'cambios'} publicados en la tienda`)}catch(e){if(e.status===401){mem.auth=false;authUI();route()}toast(e.message);updateDirty()}};
+$('#discard').onclick=()=>{draft=null;renderAdmin();toast('Cambios descartados')};
+$('#reset-all').onclick=async()=>{if(!confirm('¿Restaurar todos los precios a la lista original del Excel?'))return;try{DB=await api('/api/catalog',{method:'PUT',body:JSON.stringify({reset:true})});draft=null;renderAdmin();toast('Lista original restaurada')}catch(e){toast(e.message)}};
+$('#add-toggle').onclick=()=>{$('#add-panel').classList.toggle('hidden');$('#n-name').focus()};
+$('#add-form').addEventListener('submit',e=>{
+  e.preventDefault();ensureDraft();
+  const name=$('#n-name').value.trim(),price=+$('#n-price').value.replace(/\D/g,'');
+  if(!name||!price){toast('Completá nombre y precio');return}
+  const id=Math.max(...draft.items.map(i=>i.id),...DB.items.map(i=>i.id))+1;
+  draft.items.unshift({id,cat:$('#n-cat').value,name,price,unit:$('#n-unit').value,note:'',active:true});
+  e.target.reset();$('#n-unit').value='Por equipo';aState.q='';$('#a-q').value='';renderRows();updateDirty();toast('Servicio agregado. Guardá para publicarlo.');
+});
+
+$('#foot').textContent='Precios orientativos para Comodoro Rivadavia, octubre de 2026. No incluyen repuestos, licencias, materiales ni traslados fuera de zona urbana. Confirmamos el precio final después del diagnóstico.';
+const SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', MOON='<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+function setTheme(m){document.documentElement.setAttribute('data-theme',m);LS.set('pp_theme',m);$('#theme-ic').innerHTML=m==='dark'?SUN:MOON;$('#theme').title=m==='dark'?'Cambiar a tema claro':'Cambiar a tema oscuro';}
+setTheme(LS.get('pp_theme','light'));
+(async()=>{
+  try{const me=await api('/api/me');mem.auth=!!me.admin;}catch(e){}
+  authUI();
+  try{DB=await api('/api/catalog');SEEDP=DB.seedPrices||{};}catch(e){toast('No se pudo cargar el catálogo. Probá recargar la página.')}
+  const pago=new URLSearchParams(location.search).get('pago');
+  if(pago){ if(pago==='aprobado'){cart={};save();} history.replaceState(null,'',location.pathname+location.hash); setTimeout(()=>toast(pago==='aprobado'?'¡Pago aprobado! Te contactamos para coordinar el servicio.':pago==='pendiente'?'Tu pago quedó pendiente de acreditación.':'El pago no se completó. Podés intentar de nuevo.'),300); }
+  route();
+})();
+$('#theme').onclick=()=>setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+</script>
+</body>
+</html>
