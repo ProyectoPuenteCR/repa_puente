@@ -1,6 +1,11 @@
-import { json, fail, getCatalog, saveOrder } from './_lib/store.js';
+import { json, fail, getCatalog, saveOrder, getSession } from './_lib/store.js';
+
+// Link de cobro fijo de Mercado Pago: el cliente ingresa el monto al pagar.
+const MP_LINK = process.env.MP_LINK || 'https://link.mercadopago.com.ar/repopuente';
 
 export async function POST(request) {
+  const session = getSession(request);
+  if (!session) return json({ error: 'Ingresá con tu usuario para generar el pedido.' }, 401);
   let b = {}; try { b = await request.json(); } catch {}
   const db = await getCatalog();
   const lines = (Array.isArray(b.items) ? b.items : []).map(({ id, q }) => {
@@ -16,7 +21,7 @@ export async function POST(request) {
   const total = lines.reduce((a, l) => a + l.unit_price * l.quantity, 0);
   const id = 'PP-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
   const origin = new URL(request.url).origin;
-  const name = String(b.name || '').slice(0, 120), email = String(b.email || '').slice(0, 160);
+  const name = String(b.name || session.name || '').slice(0, 120), email = String(b.email || '').slice(0, 160);
   const preference = {
     items: lines.map((l) => ({ id: String(l.id), title: l.title, quantity: l.quantity, currency_id: 'ARS', unit_price: l.unit_price })),
     payer: email ? { name, email } : undefined,
@@ -26,7 +31,8 @@ export async function POST(request) {
     auto_return: 'approved',
     notification_url: `${origin}/api/mp-webhook`,
   };
-  let link, mode = 'demo';
+  // Con MP_ACCESS_TOKEN se crea una preferencia con el monto exacto; sin token se usa el link fijo.
+  let link = MP_LINK, mode = 'link';
   const token = process.env.MP_ACCESS_TOKEN;
   if (token) {
     const r = await fetch('https://api.mercadopago.com/checkout/preferences', {
@@ -35,10 +41,8 @@ export async function POST(request) {
     const d = await r.json().catch(() => ({}));
     if (!r.ok) { console.error('MP error', r.status, d); return json({ error: 'Mercado Pago rechazó la preferencia. Revisá el Access Token.' }, 502); }
     link = d.init_point; mode = token.startsWith('TEST-') ? 'prueba' : 'real';
-  } else {
-    link = `https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=DEMO-${id.toLowerCase()}`;
   }
-  const order = { id, createdAt: new Date().toISOString(), name, email, lines, total, status: 'pendiente', mode, link };
+  const order = { id, createdAt: new Date().toISOString(), user: session.user, role: session.role, name, email, lines, total, status: 'pendiente', mode, link };
   try { await saveOrder(order); } catch (e) { return fail(e); }
-  return json({ id, total, link, mode, preference });
+  return json({ id, total, link, mode });
 }
