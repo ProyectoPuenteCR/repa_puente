@@ -2,23 +2,27 @@
 
 Tienda de servicios de reparación con carrito, pago por Mercado Pago, panel de precios y gestión de usuarios.
 
+## Cómo funciona un pedido
+
+1. El cliente elige servicios y completa **nombre, apellido, celular con WhatsApp y dirección** (obligatorios), más email y detalle opcionales. No necesita usuario.
+2. El pedido se guarda en el Blob (`orders/`) y le llega al administrador un **email** con los datos y un botón que abre el pedido en el Panel (`#/admin/<pedido>`).
+3. Se le ofrece **registrarse** para ver su historial (usuario = su celular). Después aparece el botón **Pagar con Mercado Pago** con el monto para copiar.
+4. El administrador toca **Aceptar trabajo** en la *Hoja de pedidos* y le escribe al cliente con el botón de WhatsApp (mensaje precargado). Después marca *pagado* y *terminado*.
+
+La hoja de pedidos se puede filtrar por estado y exportar a CSV (abre en Excel o Google Sheets).
+
 ## Usuarios y roles
 
-- **Administrador**: edita precios, ve y marca pedidos, crea y administra usuarios (pestaña *Usuarios*, ruta `#/usuarios`).
-- **Visitante**: navega, arma el carrito y paga. Para generar el pedido tiene que ingresar con su usuario.
-- Los usuarios se guardan en el Blob (`db/users.json`) con la contraseña hasheada (scrypt).
-- `ADMIN_USER` / `ADMIN_PASS` siguen funcionando como administrador de respaldo: sirven para entrar la primera vez y crear los usuarios reales. Cambiá `ADMIN_PASS` por una contraseña propia.
+- **Administrador**: Panel (pedidos y precios), Configuración y Usuarios.
+- **Visitante**: compra y ve *Mis pedidos*. Se registra solo al terminar un pedido, o lo crea un administrador.
+- `ADMIN_USER` / `ADMIN_PASS` siguen funcionando como administrador de respaldo. Cambiá `ADMIN_PASS` por una contraseña propia.
 
-## Pago
+## Configuración (pestaña Configuración)
 
-Por defecto se cobra con el link fijo `https://link.mercadopago.com.ar/repopuente` (variable `MP_LINK` para cambiarlo). El sistema registra el pedido, muestra el monto a pagar y el número de pedido; el cliente escribe ese monto en Mercado Pago. El link fijo no avisa los pagos, así que el administrador marca cada pedido como *pagado* desde la lista de pedidos.
-
-Si se carga `MP_ACCESS_TOKEN`, en vez del link fijo se genera una preferencia con el monto exacto y el estado se actualiza solo por webhook.
-
-- `public/index.html`: la tienda (HTML + JS, sin build).
-- `api/`: funciones de Vercel (catálogo, login, pedidos, checkout, webhook de Mercado Pago).
-- Base de datos: **Vercel Blob** privado (gratis en el plan Hobby). Guarda `db/catalog.json` y un archivo por pedido en `orders/`.
-- `data/seed.js`: lista de precios original del Excel. Se usa hasta el primer guardado.
+- **WhatsApp de la tienda**: número del asistente flotante (por defecto 2974711779). Se escribe con código de área, sin 0 ni 15.
+- **Mensaje de bienvenida** del asistente.
+- **Email de avisos**: recibe un correo por cada pedido nuevo. Requiere `RESEND_API_KEY` en Vercel (cuenta gratis en resend.com). Sin dominio propio verificado, Resend solo entrega al email de la cuenta, que alcanza para los avisos al administrador. Opcional: `MAIL_FROM` con un remitente de un dominio verificado.
+- **Link de cobro de Mercado Pago**. Si se carga `MP_ACCESS_TOKEN`, se genera un link con el monto exacto y el pago se marca solo por webhook.
 
 ## Publicarlo
 
@@ -37,6 +41,8 @@ Si se carga `MP_ACCESS_TOKEN`, en vez del link fijo se genera una preferencia co
 | POST | `/api/login` / `/api/logout` | Sesión (cookie firmada con usuario y rol) |
 | GET | `/api/me` | Sesión actual |
 | GET/POST/PATCH/DELETE | `/api/users` | Gestión de usuarios (admin) |
-| POST | `/api/checkout` | Requiere sesión. Recalcula precios en el servidor, crea el pedido y devuelve el link de pago |
-| GET / PATCH | `/api/orders` | Últimos pedidos y cambio de estado (admin) |
+| GET / PUT / POST | `/api/config` | Configuración pública y de admin; POST envía un email de prueba |
+| POST | `/api/register` | Registro del cliente a partir de su pedido |
+| POST | `/api/checkout` | Pedido público con datos obligatorios; recalcula precios, guarda y avisa por email |
+| GET / PATCH | `/api/orders` | Admin: todos y cambio de estado. Cliente: sus pedidos |
 | POST | `/api/mp-webhook` | Mercado Pago avisa pagos y se actualiza el estado del pedido |
