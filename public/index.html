@@ -153,6 +153,52 @@ aside.filters h3{font-size:14px;margin:0 0 10px}
 .qty-inline span{font-weight:700;color:var(--blue)}
 .empty{background:var(--surface);border-radius:8px;padding:40px;text-align:center;color:var(--ink-2)}
 
+/* ---------- pedidos, popup y técnicos ---------- */
+.ord-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
+.ord-bar input[type=search]{flex:1 1 280px;min-width:0;border:1px solid var(--line);background:var(--surface);color:inherit;border-radius:6px;padding:10px 12px;font:inherit}
+.ord-bar input[type=search]:focus{outline:2px solid var(--blue);outline-offset:-1px;border-color:transparent}
+.ord-hint{font-size:13px;color:var(--ink-2);padding:10px 20px 0;margin:0}
+tr.ord-row{cursor:pointer}
+tr.ord-row:hover{background:var(--surface-2)}
+.ord-tech{font-size:13px}.ord-tech small{display:block;color:var(--ink-2)}
+.btn-danger{background:transparent;color:var(--red);border:1px solid currentColor}
+.btn-danger:hover{background:#FDE3E1}
+:root[data-theme="dark"] .btn-danger:hover{background:#3A1F1D}
+dialog.dlg{border:0;border-radius:12px;padding:0;width:min(780px,calc(100vw - 24px));max-height:calc(100dvh - 24px);background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog.dlg::backdrop{background:rgba(10,20,40,.55)}
+.dlg-in{display:flex;flex-direction:column;max-height:calc(100dvh - 24px)}
+.dlg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 12px 12px 20px;border-bottom:1px solid var(--line)}
+.dlg-head h2{margin:0;font-size:20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dlg-x{border:0;background:transparent;font-size:28px;line-height:1;width:44px;height:44px;border-radius:8px;color:var(--ink-2);cursor:pointer}
+.dlg-x:hover{background:var(--surface-2)}
+.dlg-body{padding:18px 20px;overflow:auto;display:flex;flex-direction:column;gap:16px}
+.dlg-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:14px 20px;border-top:1px solid var(--line)}
+.dlg-foot .grow{flex:1}
+.dlg-foot .btn{min-height:44px}
+.od-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.od-box{background:var(--surface-2);border-radius:8px;padding:12px 14px;font-size:14px;min-width:0}
+.od-box h3{margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.od-box p{margin:0 0 3px;overflow-wrap:anywhere}
+.od-lines{list-style:none;margin:0;padding:0}
+.od-lines li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.od-lines li:last-child{border-bottom:0}
+.od-lines li span:last-child{white-space:nowrap;font-weight:600}
+.od-total{display:flex;justify-content:space-between;margin-top:8px;font-weight:800;font-size:16px}
+.od-quote{font-style:italic;margin:8px 0 0;color:var(--ink-2)}
+.od-edit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.od-edit .full{grid-column:1/-1}
+.od-edit .field{margin:0}
+.od-edit h3{grid-column:1/-1;margin:0;font-size:15px}
+.od-note{font-size:13px;color:var(--ink-2);margin:0}
+.tech-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;align-items:end;padding:16px 20px 4px}
+.tech-form .field{margin:0}
+.tech-btns{display:flex;gap:6px}
+.tech-list{padding:4px 20px 16px}
+.tech-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.tech-row small{display:block;color:var(--ink-2)}
+.tech-row .btn{padding:7px 12px;font-size:13px}
+@media (max-width:700px){.od-grid,.od-edit{grid-template-columns:1fr}.tech-form{grid-template-columns:1fr}}
+
 /* ---------- combos ---------- */
 .combos{margin-bottom:20px}
 .cb-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:6px}
@@ -445,7 +491,8 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
           <a class="nav-btn logged-only visitor-only" data-nav="mis-pedidos" href="#/mis-pedidos"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span class="lbl">Mis pedidos</span></a>
           <a class="nav-btn admin-only" data-nav="config" href="#/config" aria-label="Configuración" title="Configuración"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="lbl">Config.</span></a>
           <a class="nav-btn admin-only" data-nav="usuarios" href="#/usuarios" title="Usuarios"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.8c1.6.8 2.7 2.5 3 5.2"/></svg><span class="lbl">Usuarios</span></a>
-          <a class="nav-btn admin-only" data-nav="admin" href="#/admin" title="Panel: pedidos y precios"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg><span class="lbl">Panel</span></a>
+          <a class="nav-btn admin-only" data-nav="pedidos" href="#/pedidos" title="Pedidos"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span class="lbl">Pedidos</span></a>
+          <a class="nav-btn admin-only" data-nav="admin" href="#/admin" title="Precios"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg><span class="lbl">Precios</span></a>
           <a class="nav-btn" data-nav="carrito" href="#/carrito" aria-label="Carrito"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><span class="cart-count" id="cart-count">0</span></a>
           <button class="nav-btn" id="theme" title="Cambiar a tema oscuro" aria-label="Cambiar tema"><svg id="theme-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
           <span class="who" id="who"></span>
@@ -548,6 +595,18 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
         <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" type="submit" id="cfg-save">Guardar configuración</button><button class="btn btn-soft" type="button" id="cfg-test">Enviar email de prueba</button></div>
       </form>
     </section>
+    <section class="panel" style="margin-top:16px" id="tech-panel" aria-labelledby="tech-title">
+      <div class="panel-head" id="tech-title">Técnicos</div>
+      <p class="cfg-note" style="padding:12px 20px 0;margin:0">Los técnicos que cargues acá aparecen en cada pedido. Desde el pedido podés avisarles por WhatsApp con todos los datos del trabajo.</p>
+      <form class="tech-form" id="tech-form" novalidate>
+        <label class="field"><span>Nombre del técnico</span><input id="tc-name" autocomplete="off" required></label>
+        <label class="field"><span>Teléfono (con código de área)</span><input id="tc-phone" type="tel" inputmode="tel" placeholder="2974711779" required></label>
+        <label class="field"><span>Email</span><input id="tc-mail" type="email" placeholder="tecnico@email.com"></label>
+        <div class="tech-btns"><button class="btn btn-primary" type="submit" id="tc-save">Agregar técnico</button><button class="btn btn-ghost" type="button" id="tc-cancel" hidden>Cancelar</button></div>
+      </form>
+      <p class="err" id="tc-err" role="alert" style="padding:0 20px;margin:0 0 6px"></p>
+      <div class="tech-list" id="tech-list"></div>
+    </section>
   </main>
 
   <!-- USUARIOS -->
@@ -579,21 +638,46 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
     </div>
   </main>
 
+  <!-- PEDIDOS -->
+  <main id="v-pedidos" class="wrap hidden">
+    <div class="admin-head">
+      <div><h1>Pedidos</h1><p>Buscá por cliente o por falla. Hacé doble clic en un pedido para ver todo el trabajo, asignar técnico y editarlo.</p></div>
+    </div>
+    <div class="stats" id="ord-stats"></div>
+    <section class="panel" style="margin-bottom:16px" id="orders-panel">
+      <div class="panel-head"><span>Hoja de pedidos <small id="ord-count" style="color:var(--red);font-weight:600;font-size:13px"></small></span><div class="ord-tools"><button class="btn btn-ghost" id="ord-csv">Exportar CSV</button><button class="btn btn-ghost" id="ord-reload">Actualizar</button></div></div>
+      <div class="ord-bar">
+        <input id="ord-q" type="search" placeholder="Buscar por cliente, celular, falla o servicio" aria-label="Buscar pedidos por cliente o falla" autocomplete="off">
+        <select id="ord-filter" aria-label="Filtrar por estado"><option value="todos">Todos los estados</option><option value="pendiente">Sin aceptar</option><option value="aceptado">Aceptados</option><option value="pagado">Pagados</option><option value="terminado">Terminados</option><option value="cancelado">Cancelados</option></select>
+      </div>
+      <div id="orders"></div>
+    </section>
+    <dialog id="ord-dlg" class="dlg" aria-labelledby="od-title">
+      <div class="dlg-in">
+        <div class="dlg-head"><h2 id="od-title">Pedido</h2><button type="button" class="dlg-x" id="od-close" aria-label="Cerrar">×</button></div>
+        <div class="dlg-body" id="od-body"></div>
+        <p class="err" id="od-err" role="alert" style="padding:0 20px;margin:0"></p>
+        <div class="dlg-foot">
+          <button type="button" class="btn btn-danger" id="od-del">Borrar pedido</button>
+          <span class="grow"></span>
+          <button type="button" class="btn btn-wa" id="od-notify">Avisar al técnico</button>
+          <button type="button" class="btn btn-soft" id="od-mail" hidden>Avisar por email</button>
+          <button type="button" class="btn btn-primary" id="od-save">Guardar cambios</button>
+        </div>
+      </div>
+    </dialog>
+  </main>
+
   <!-- ADMIN -->
   <main id="v-admin" class="wrap hidden">
     <div class="admin-head">
-      <div><h1>Panel</h1><p>Pedidos de clientes y lista de precios. Los cambios de precios se aplican a la tienda al guardar.</p></div>
+      <div><h1>Precios</h1><p>Lista de precios de los servicios. Los cambios se aplican a la tienda al guardar. Los pedidos están en su propia sección.</p></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn btn-soft" id="add-toggle">Agregar servicio</button>
         <button class="btn btn-ghost" id="reset-all">Restaurar lista original</button>
       </div>
     </div>
     <div class="stats" id="stats"></div>
-
-    <section class="panel" style="margin-bottom:16px" id="orders-panel">
-      <div class="panel-head"><span>Hoja de pedidos <small id="ord-count" style="color:var(--red);font-weight:600;font-size:13px"></small></span><div class="ord-tools"><select id="ord-filter" aria-label="Filtrar por estado"><option value="todos">Todos</option><option value="pendiente">Sin aceptar</option><option value="aceptado">Aceptados</option><option value="pagado">Pagados</option><option value="terminado">Terminados</option><option value="cancelado">Cancelados</option></select><button class="btn btn-ghost" id="ord-csv">Exportar CSV</button><button class="btn btn-ghost" id="ord-reload">Actualizar</button></div></div>
-      <div id="orders"></div>
-    </section>
 
     <section class="panel hidden" id="add-panel" style="margin-bottom:16px">
       <div class="panel-head">Nuevo servicio</div>
@@ -719,9 +803,9 @@ const findByName = n => DB.items.find(i=>i.name===n && i.active && i.price!=null
 /* ---------- auth & routing ---------- */
 const isAuth = () => mem.auth;            // administrador
 const isLogged = () => !!mem.session;      // cualquier usuario
-const ADMIN_VIEWS = ['admin','usuarios','config'];
+const ADMIN_VIEWS = ['admin','pedidos','usuarios','config'];
 const LOGGED_VIEWS = ['mis-pedidos'];
-const VIEWS = ['tienda','carrito','mis-pedidos','admin','usuarios','config'];
+const VIEWS = ['tienda','carrito','mis-pedidos','admin','pedidos','usuarios','config'];
 let afterLogin = null;
 function route(){
   const full = (location.hash.replace('#/','')||'tienda');
@@ -731,7 +815,8 @@ function route(){
     afterLogin = full; show('login'); return;
   }
   if(r==='login'){ if(isLogged()){ location.hash = isAuth()?'#/admin':'#/tienda'; return; } show('login'); return; }
-  state.focusOrder = r==='admin' && arg ? decodeURIComponent(arg) : null;
+  if(r==='admin' && arg){ location.hash='#/pedidos/'+arg; return; }
+  state.focusOrder = r==='pedidos' && arg ? decodeURIComponent(arg) : null;
   show(VIEWS.includes(r)?r:'tienda');
 }
 function show(v){
@@ -745,6 +830,7 @@ function show(v){
   if(v==='tienda') renderStore();
   if(v==='carrito') renderCart();
   if(v==='admin') renderAdmin();
+  if(v==='pedidos') renderPedidos();
   if(v==='usuarios') renderUsers();
   if(v==='mis-pedidos') renderMyOrders();
   if(v==='config') renderConfig();
@@ -1085,10 +1171,13 @@ function renderAdmin(){
    <div class="stat"><span>Categorías</span><b>${cats().length}</b></div>
    <div class="stat"><span>Precio promedio</span><b>${fmt(avg)}</b></div>
    <div class="stat"><span>Variación vs. lista Excel</span><b style="color:${chg>0.05?'var(--green)':chg<-0.05?'var(--red)':'inherit'}">${chg>=0?'+':''}${chg.toFixed(1)}%</b></div>`;
-  renderRows(); renderHours(); updateDirty(); loadOrders();
+  renderRows(); renderHours(); updateDirty();
 }
-let ORDERS=[];
+let ORDERS=[], TECHS=[], odCur=null;
 const ORD_ST=['pendiente','aceptado','pagado','terminado','cancelado'];
+const orderName=o=>o.name||[o.nombre,o.apellido].filter(Boolean).join(' ')||'—';
+const fDate=d=>d?d.split('-').reverse().join('/'):'—';
+const fStamp=s=>new Date(s).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'});
 function clientMsg(o){
   const n=(o.nombre||o.name||'').split(' ')[0];
   if(o.status==='pendiente') return `Hola ${n}, te escribimos de Puente Service por tu pedido ${o.id}. `;
@@ -1096,42 +1185,173 @@ function clientMsg(o){
   if(o.status==='terminado') return `Hola ${n}, tu equipo del pedido ${o.id} ya está listo. `;
   return `Hola ${n}, te escribimos de Puente Service por tu pedido ${o.id}. `;
 }
+async function loadTechs(){
+  try{ TECHS=(await api('/api/technicians')).technicians||[]; }
+  catch(e){ if(e.status===401) return sessionLost(); }
+}
+async function renderPedidos(){ await Promise.all([loadTechs(),loadOrders()]); }
 async function loadOrders(){
   const box=$('#orders'); box.innerHTML='<div class="empty" style="box-shadow:none">Cargando pedidos…</div>';
-  try{ ORDERS=(await api('/api/orders')).orders; renderOrders(); }
+  try{ ORDERS=(await api('/api/orders')).orders; renderOrders();
+    if(state.focusOrder){ const id=state.focusOrder; state.focusOrder=null; openOrder(id); } }
   catch(e){ if(e.status===401) return sessionLost(); box.innerHTML=`<div class="empty" style="box-shadow:none">${esc(e.message)}</div>`; }
 }
+const orderHay=o=>norm([o.id,orderName(o),o.phone,o.address,o.email,o.detalle,o.obs,o.workDone,o.techName,...(o.lines||[]).map(l=>l.title)].join(' '));
 function renderOrders(){
-  const f=$('#ord-filter').value, list=ORDERS.filter(o=>f==='todos'||o.status===f);
-  const pend=ORDERS.filter(o=>o.status==='pendiente').length;
+  const f=$('#ord-filter').value, q=norm($('#ord-q').value.trim()).split(/\s+/).filter(Boolean);
+  const list=ORDERS.filter(o=>(f==='todos'||o.status===f)&&q.every(w=>orderHay(o).includes(w)));
+  const n=s=>ORDERS.filter(o=>s.includes(o.status)).length;
+  const pend=n(['pendiente']);
   $('#ord-count').textContent=pend?`${pend} sin aceptar`:'';
-  $('#orders').innerHTML=list.length?`<div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Servicio solicitado</th><th style="text-align:right">Total</th><th>Estado</th><th></th></tr></thead><tbody>${list.map(o=>`<tr data-row="${esc(o.id)}" class="${o.id===state.focusOrder?'focus':''}">
-    <td style="white-space:nowrap"><b>${esc(o.id)}</b><br><small style="color:var(--ink-2)">${new Date(o.createdAt).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'})}</small></td>
-    <td class="cli"><b>${esc(o.name||'—')}</b>${o.phone?`<small>${esc(fmtPhone(o.phone))}</small>`:''}${o.address?`<small>${esc(o.address)}</small>`:''}${o.email?`<small>${esc(o.email)}</small>`:''}${o.user?`<small>Usuario: ${esc(o.user)}</small>`:''}</td>
+  $('#ord-stats').innerHTML=`<div class="stat"><span>Pedidos</span><b>${ORDERS.length}</b></div><div class="stat"><span>Sin aceptar</span><b>${pend}</b></div><div class="stat"><span>En curso</span><b>${n(['aceptado','pagado'])}</b></div><div class="stat"><span>Terminados</span><b>${n(['terminado'])}</b></div>`;
+  $('#orders').innerHTML=list.length?`<div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Falla / servicio solicitado</th><th>Técnico</th><th>Inicio · Fin</th><th style="text-align:right">Total</th><th>Estado</th><th></th></tr></thead><tbody>${list.map(o=>`<tr data-row="${esc(o.id)}" class="ord-row" title="Doble clic para abrir el pedido">
+    <td style="white-space:nowrap"><b>${esc(o.id)}</b><br><small style="color:var(--ink-2)">${fStamp(o.createdAt)}</small></td>
+    <td class="cli"><b>${esc(orderName(o))}</b>${o.phone?`<small>${esc(fmtPhone(o.phone))}</small>`:''}${o.address?`<small>${esc(o.address)}</small>`:''}</td>
     <td style="font-size:13px">${o.lines.map(l=>esc(l.title)+(l.quantity>1?' ×'+l.quantity:'')).join('<br>')}${o.detalle?`<div class="det">“${esc(o.detalle)}”</div>`:''}</td>
+    <td class="ord-tech">${o.techName?esc(o.techName):'<small>Sin asignar</small>'}</td>
+    <td style="white-space:nowrap;font-size:13px">${fDate(o.startDate)}<br>${fDate(o.endDate)}</td>
     <td class="num">${fmt(o.total)}</td>
     <td><select class="st st-${esc(o.status)}" data-oid="${esc(o.id)}" aria-label="Estado del pedido ${esc(o.id)}">${ORD_ST.map(x=>`<option value="${x}" ${x===o.status?'selected':''}>${x}</option>`).join('')}${ORD_ST.includes(o.status)?'':`<option selected>${esc(o.status)}</option>`}</select></td>
-    <td><div class="ord-acts">${o.status==='pendiente'?`<button class="btn btn-primary" data-accept="${esc(o.id)}">Aceptar trabajo</button>`:''}
-      ${o.phone?`<a class="btn btn-wa" href="${esc(waLink(o.phone,clientMsg(o)))}" target="_blank" rel="noopener">WhatsApp</a>`:''}</div></td></tr>`).join('')}</tbody></table></div>`
-    :`<div class="empty" style="box-shadow:none">${ORDERS.length?'No hay pedidos con ese estado.':'Todavía no hay pedidos. Se crean cuando un cliente toca “Enviar pedido” en el carrito.'}</div>`;
-  if(state.focusOrder){ const row=document.querySelector(`tr[data-row="${CSS.escape(state.focusOrder)}"]`); if(row) setTimeout(()=>row.scrollIntoView({block:'center',behavior:'smooth'}),100); else if(ORDERS.length) toast('No encontré ese pedido en la lista'); state.focusOrder=null; }
+    <td><div class="ord-acts"><button class="btn btn-soft" data-open="${esc(o.id)}">Abrir</button>${o.status==='pendiente'?`<button class="btn btn-primary" data-accept="${esc(o.id)}">Aceptar trabajo</button>`:''}
+      ${o.phone?`<a class="btn btn-wa" href="${esc(waLink(o.phone,clientMsg(o)))}" target="_blank" rel="noopener">WhatsApp</a>`:''}<button class="btn btn-danger" data-del="${esc(o.id)}">Borrar</button></div></td></tr>`).join('')}</tbody></table></div>`
+    :`<div class="empty" style="box-shadow:none">${ORDERS.length?'No hay pedidos que coincidan con la búsqueda.':'Todavía no hay pedidos. Se crean cuando un cliente toca “Enviar pedido” en el carrito.'}</div>`;
 }
 async function setOrderStatus(id,status){
   try{ const {order}=await api('/api/orders',{method:'PATCH',body:JSON.stringify({id,status})}); const i=ORDERS.findIndex(o=>o.id===id); if(i>=0) ORDERS[i]=order; renderOrders(); toast(status==='aceptado'?`Pedido ${id} aceptado. Avisale al cliente por WhatsApp.`:`Pedido ${id}: ${status}`); }
   catch(err){ if(err.status===401) return sessionLost(); toast(err.message); renderOrders(); }
 }
+async function deleteOrder(id){
+  const o=ORDERS.find(x=>x.id===id);
+  if(!confirm(`¿Borrar el pedido ${id}${o?' de '+orderName(o):''}? Se elimina para siempre y no se puede deshacer.`)) return false;
+  try{ await api('/api/orders?id='+encodeURIComponent(id),{method:'DELETE'}); ORDERS=ORDERS.filter(x=>x.id!==id); renderOrders(); toast(`Pedido ${id} borrado`); return true; }
+  catch(err){ if(err.status===401){ sessionLost(); return false; } toast(err.message); return false; }
+}
 $('#orders').addEventListener('change',e=>{ const t=e.target; if(t.dataset.oid) setOrderStatus(t.dataset.oid,t.value); });
-$('#orders').addEventListener('click',e=>{ const t=e.target.closest('[data-accept]'); if(t){ t.disabled=true; setOrderStatus(t.dataset.accept,'aceptado'); } });
+$('#orders').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.accept){ b.disabled=true; setOrderStatus(b.dataset.accept,'aceptado'); }
+  else if(b.dataset.open) openOrder(b.dataset.open);
+  else if(b.dataset.del) deleteOrder(b.dataset.del);
+});
+$('#orders').addEventListener('dblclick',e=>{ const tr=e.target.closest('tr[data-row]'); if(tr && !e.target.closest('select,button,a')) openOrder(tr.dataset.row); });
 $('#ord-filter').onchange=renderOrders;
+$('#ord-q').addEventListener('input',renderOrders);
 $('#ord-reload').onclick=loadOrders;
 $('#ord-csv').onclick=()=>{
   if(!ORDERS.length){toast('No hay pedidos para exportar');return}
   const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
-  const head=['Pedido','Fecha','Nombre','Apellido','Celular','Dirección','Email','Usuario','Servicios','Detalle','Domicilio','Total','Estado'];
-  const rows=ORDERS.map(o=>[o.id,new Date(o.createdAt).toLocaleString('es-AR'),o.nombre||o.name,o.apellido||'',o.phone||'',o.address||'',o.email||'',o.user||'',o.lines.map(l=>l.title+(l.quantity>1?' x'+l.quantity:'')).join(' | '),o.detalle||'',o.home?'Sí':'No',o.total,o.status]);
+  const head=['Pedido','Fecha','Nombre','Apellido','Celular','Dirección','Email','Usuario','Servicios','Detalle del cliente','Domicilio','Total','Estado','Técnico','Inicio','Fin','Trabajo realizado','Observaciones'];
+  const rows=ORDERS.map(o=>[o.id,new Date(o.createdAt).toLocaleString('es-AR'),o.nombre||o.name,o.apellido||'',o.phone||'',o.address||'',o.email||'',o.user||'',o.lines.map(l=>l.title+(l.quantity>1?' x'+l.quantity:'')).join(' | '),o.detalle||'',o.home?'Sí':'No',o.total,o.status,o.techName||'',o.startDate||'',o.endDate||'',o.workDone||'',o.obs||'']);
   const csv='\ufeff'+[head,...rows].map(r=>r.map(q).join(';')).join('\r\n');
   const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download=`pedidos-puente-${new Date().toISOString().slice(0,10)}.csv`; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 };
+
+/* ---------- popup del pedido ---------- */
+const dlg=$('#ord-dlg');
+function openOrder(id){
+  const o=ORDERS.find(x=>x.id===id); if(!o){ toast('No encontré ese pedido en la lista'); return; }
+  odCur=o; $('#od-err').textContent=''; renderDlg(); if(!dlg.open) dlg.showModal();
+}
+function renderDlg(){
+  const o=odCur, inList=TECHS.some(t=>t.id===o.techId);
+  $('#od-title').innerHTML=`Pedido ${esc(o.id)} <span class="st st-${esc(o.status)}">${esc(o.status)}</span>`;
+  $('#od-body').innerHTML=`<div class="od-grid">
+    <div class="od-box"><h3>Cliente</h3><p><b>${esc(orderName(o))}</b></p>${o.phone?`<p>${esc(fmtPhone(o.phone))}</p>`:''}${o.address?`<p>${esc(o.address)}</p>`:''}${o.email?`<p>${esc(o.email)}</p>`:''}${o.user?`<p>Usuario: ${esc(o.user)}</p>`:''}</div>
+    <div class="od-box"><h3>Pedido</h3><p>Recibido: ${fStamp(o.createdAt)}</p><p>${o.home?'Servicio a domicilio':'Se entrega el equipo en el taller'}</p>${o.acceptedAt?`<p>Aceptado: ${fStamp(o.acceptedAt)}</p>`:''}${o.techNotifiedAt?`<p>Técnico avisado: ${fStamp(o.techNotifiedAt)}</p>`:''}</div>
+  </div>
+  <div class="od-box"><h3>Falla y servicios solicitados</h3><ul class="od-lines">${o.lines.map(l=>`<li><span>${esc(l.title)}${l.quantity>1?' ×'+l.quantity:''}</span><span>${fmt(l.unit_price*l.quantity)}</span></li>`).join('')}</ul><div class="od-total"><span>Total</span><span>${fmt(o.total)}</span></div>${o.detalle?`<p class="od-quote">“${esc(o.detalle)}”</p>`:''}</div>
+  <div class="od-edit">
+    <h3>Reparación</h3>
+    <label class="field"><span>Estado</span><select id="od-status">${ORD_ST.map(x=>`<option value="${x}" ${x===o.status?'selected':''}>${x}</option>`).join('')}${ORD_ST.includes(o.status)?'':`<option value="${esc(o.status)}" selected>${esc(o.status)}</option>`}</select></label>
+    <label class="field"><span>Técnico que realiza la reparación</span><select id="od-tech"><option value="">Sin asignar</option>${TECHS.map(t=>`<option value="${esc(t.id)}" ${t.id===o.techId?'selected':''}>${esc(t.name)}</option>`).join('')}${o.techId&&!inList?`<option value="${esc(o.techId)}" selected>${esc(o.techName||'Técnico')} (ya no está en la lista)</option>`:''}</select></label>
+    <label class="field"><span>Fecha de inicio del servicio</span><input id="od-start" type="date" value="${esc(o.startDate||'')}"></label>
+    <label class="field"><span>Fecha de fin</span><input id="od-end" type="date" value="${esc(o.endDate||'')}"></label>
+    <label class="field full"><span>Trabajo realizado en la máquina</span><textarea id="od-work" rows="4" maxlength="3000" placeholder="Ej.: limpieza interna, cambio de pasta térmica, reinstalación de Windows…">${esc(o.workDone||'')}</textarea></label>
+    <label class="field full"><span>Observaciones</span><textarea id="od-obs" rows="3" maxlength="1500" placeholder="Notas internas del pedido">${esc(o.obs||'')}</textarea></label>
+    ${TECHS.length?'':'<p class="od-note full">Todavía no cargaste técnicos. Agregalos en <a href="#/config">Configuración</a> para poder asignarlos y avisarles.</p>'}
+  </div>`;
+  updDlgBtns();
+}
+const odForm=()=>({status:$('#od-status').value,techId:$('#od-tech').value,startDate:$('#od-start').value,endDate:$('#od-end').value,workDone:$('#od-work').value,obs:$('#od-obs').value});
+function updDlgBtns(){
+  const t=TECHS.find(x=>x.id===$('#od-tech')?.value);
+  $('#od-notify').disabled=!t; $('#od-notify').title=t?`Abre WhatsApp con el pedido para ${t.name}`:'Elegí primero un técnico';
+  $('#od-mail').hidden=!(t&&t.email);
+}
+function techMsg(o,f,t){
+  const L=[`Hola ${t.name.split(' ')[0]}, tenés un soporte asignado.`,'',`Pedido: ${o.id}`,`Cliente: ${orderName(o)}`];
+  if(o.phone) L.push(`Celular: ${fmtPhone(o.phone)}`);
+  if(o.address) L.push(`Dirección: ${o.address}`);
+  L.push(o.home?'Servicio a domicilio: sí':'Servicio a domicilio: no','','Falla / servicios:');
+  o.lines.forEach(l=>L.push(`- ${l.title}${l.quantity>1?' x'+l.quantity:''} (${fmt(l.unit_price*l.quantity)})`));
+  L.push(`Total: ${fmt(o.total)}`);
+  if(o.detalle) L.push('',`Detalle del cliente: ${o.detalle}`);
+  if(f.startDate||f.endDate) L.push('',`Inicio: ${fDate(f.startDate)} · Fin: ${fDate(f.endDate)}`);
+  if(f.obs) L.push('',`Observaciones: ${f.obs}`);
+  L.push('','Avisame si podés tomarlo.');
+  return L.join('\n');
+}
+async function saveOd(extra={}){
+  const {order}=await api('/api/orders',{method:'PATCH',body:JSON.stringify({id:odCur.id,...odForm(),...extra})});
+  const i=ORDERS.findIndex(x=>x.id===order.id); if(i>=0) ORDERS[i]=order; odCur=order; return order;
+}
+$('#od-body').addEventListener('change',e=>{ if(e.target.id==='od-tech') updDlgBtns(); });
+$('#od-save').onclick=async()=>{
+  const b=$('#od-save'); b.disabled=true; $('#od-err').textContent='';
+  try{ await saveOd(); renderOrders(); renderDlg(); toast('Pedido guardado'); }
+  catch(err){ if(err.status===401){ dlg.close(); return sessionLost(); } $('#od-err').textContent=err.message; }
+  finally{ b.disabled=false; }
+};
+$('#od-notify').onclick=()=>{
+  const f=odForm(), t=TECHS.find(x=>x.id===f.techId);
+  if(!t){ $('#od-err').textContent='Elegí primero el técnico que va a hacer la reparación.'; return; }
+  $('#od-err').textContent='';
+  window.open(waLink(t.phone,techMsg(odCur,f,t)),'_blank','noopener');
+  saveOd({notifyTech:true}).then(()=>{ renderOrders(); renderDlg(); toast(`Aviso preparado para ${t.name}. Enviá el mensaje desde WhatsApp.`); })
+    .catch(err=>{ $('#od-err').textContent='Se abrió WhatsApp, pero no se pudo guardar el pedido: '+err.message; });
+};
+$('#od-mail').onclick=()=>{
+  const f=odForm(), t=TECHS.find(x=>x.id===f.techId); if(!t||!t.email) return;
+  window.open(`mailto:${t.email}?subject=${encodeURIComponent('Soporte asignado · pedido '+odCur.id)}&body=${encodeURIComponent(techMsg(odCur,f,t))}`);
+  saveOd({notifyTech:true}).then(()=>{ renderOrders(); renderDlg(); }).catch(()=>{});
+};
+$('#od-del').onclick=async()=>{ if(await deleteOrder(odCur.id)) dlg.close(); };
+$('#od-close').onclick=()=>dlg.close();
+dlg.addEventListener('click',e=>{ if(e.target===dlg) dlg.close(); });
+
+/* ---------- técnicos (Configuración) ---------- */
+let techEdit=null;
+async function renderTechs(){ await loadTechs(); drawTechs(); }
+function drawTechs(){
+  $('#tech-list').innerHTML=TECHS.length?TECHS.map(t=>`<div class="tech-row"><div><b>${esc(t.name)}</b><small>${esc(fmtPhone(t.phone))}${t.email?' · '+esc(t.email):''}</small></div><div style="display:flex;gap:6px"><button class="btn btn-soft" data-tedit="${esc(t.id)}">Editar</button><button class="btn btn-danger" data-tdel="${esc(t.id)}">Quitar</button></div></div>`).join(''):'<div class="tech-row"><small>Todavía no hay técnicos cargados.</small></div>';
+}
+function techForm(t){
+  techEdit=t?t.id:null;
+  $('#tc-name').value=t?t.name:''; $('#tc-phone').value=t?t.phone:''; $('#tc-mail').value=t?(t.email||''):'';
+  $('#tc-save').textContent=t?'Guardar cambios':'Agregar técnico'; $('#tc-cancel').hidden=!t; $('#tc-err').textContent='';
+  if(t) $('#tc-name').focus();
+}
+async function saveTechs(list){ const d=await api('/api/technicians',{method:'PUT',body:JSON.stringify({technicians:list})}); TECHS=d.technicians||[]; drawTechs(); }
+$('#tech-form').addEventListener('submit',async e=>{
+  e.preventDefault(); $('#tc-err').textContent='';
+  const t={id:techEdit||undefined,name:$('#tc-name').value.trim(),phone:$('#tc-phone').value,email:$('#tc-mail').value.trim()};
+  if(!t.name){ $('#tc-err').textContent='Escribí el nombre del técnico.'; return; }
+  const list=techEdit?TECHS.map(x=>x.id===techEdit?t:x):[...TECHS,t];
+  $('#tc-save').disabled=true;
+  try{ await saveTechs(list); toast(techEdit?'Técnico actualizado':'Técnico agregado'); techForm(null); }
+  catch(err){ if(err.status===401) return sessionLost(); $('#tc-err').textContent=err.message; }
+  finally{ $('#tc-save').disabled=false; }
+});
+$('#tc-cancel').onclick=()=>techForm(null);
+$('#tech-list').addEventListener('click',async e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.tedit) techForm(TECHS.find(x=>x.id===b.dataset.tedit));
+  else if(b.dataset.tdel){
+    const t=TECHS.find(x=>x.id===b.dataset.tdel); if(!t||!confirm(`¿Quitar a ${t.name} de la lista de técnicos? Los pedidos ya asignados conservan su nombre.`)) return;
+    try{ await saveTechs(TECHS.filter(x=>x.id!==t.id)); toast('Técnico quitado'); if(techEdit===t.id) techForm(null); }
+    catch(err){ if(err.status===401) return sessionLost(); toast(err.message); }
+  }
+});
 function renderRows(){
   $('#a-body').innerHTML=aVisible().map(d=>{
     const o=byId(d.id), op=o?.price, ch=!o||op!==d.price||o.active!==d.active;
@@ -1201,6 +1421,7 @@ $('#wa-form').addEventListener('submit',e=>{ e.preventDefault(); const t=$('#wa-
 
 async function renderConfig(){
   $('#cfg-err').textContent='';
+  renderTechs();
   try{ const c=await api('/api/config'); Object.assign(CFG,c);
     $('#cfg-wa').value=c.whatsapp; $('#cfg-greet').value=c.botGreeting; $('#cfg-mail').value=c.notifyEmail||''; $('#cfg-mp').value=c.mpLink;
     cfgPreview(); mailState(c.mailReady);
