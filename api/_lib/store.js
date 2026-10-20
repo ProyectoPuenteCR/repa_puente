@@ -1,4 +1,4 @@
-import { get, put, list } from '@vercel/blob';
+import { get, put, list, del } from '@vercel/blob';
 import crypto from 'node:crypto';
 import seed from '../../data/seed.js';
 
@@ -28,6 +28,12 @@ export const seedCatalog = () => structuredClone(seed);
 
 export async function saveOrder(order) { await writeJSON(`orders/${order.id}.json`, order); return order; }
 export async function getOrder(id) { return readJSON(`orders/${id}.json`); }
+export async function deleteOrder(id) {
+  const pathname = `orders/${id}.json`;
+  const { blobs } = await list({ prefix: pathname, limit: 5 });
+  const b = blobs.find((x) => x.pathname === pathname);
+  if (b) await del(b.url);
+}
 export async function listOrders(limit = 200) {
   const { blobs } = await list({ prefix: 'orders/', limit: 1000 });
   blobs.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
