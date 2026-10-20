@@ -153,6 +153,54 @@ aside.filters h3{font-size:14px;margin:0 0 10px}
 .qty-inline span{font-weight:700;color:var(--blue)}
 .empty{background:var(--surface);border-radius:8px;padding:40px;text-align:center;color:var(--ink-2)}
 
+/* ---------- combos ---------- */
+.combos{margin-bottom:20px}
+.cb-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:6px}
+.cb-head h2{margin:0;font-size:34px;line-height:1.05;font-weight:800;letter-spacing:-.025em}
+.cb-pill{background:#C2410C;color:#fff;font-weight:700;font-size:13px;padding:6px 14px;border-radius:999px}
+.cb-sub{margin:0 0 18px;color:var(--ink-2);max-width:62ch}
+.cb-layout{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.cb-main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:22px}
+.cb-step{margin:0 0 10px;font-size:18px;font-weight:700;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.cb-step b{width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--surface);display:inline-grid;place-items:center;font-size:14px}
+.cb-step small{font-size:14px;font-weight:500;color:var(--ink-2)}
+.cb-eq{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-left:auto}
+.cb-eq button{border:0;background:var(--surface);color:var(--ink);font:inherit;font-size:13.5px;font-weight:600;padding:0 14px;min-height:36px;cursor:pointer}
+.cb-eq button[aria-pressed="true"]{background:var(--blue);color:#fff}
+.cb-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cb-tile{text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px;min-height:170px;cursor:pointer}
+.cb-tile:hover{border-color:var(--blue)}
+.cb-tile.on{border-color:var(--blue);background:var(--blue-soft)}
+.cb-name{font-size:18px;font-weight:800;line-height:1.15}
+.cb-desc{font-size:13.5px;color:var(--ink-2);flex:1}
+.cb-price{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.cb-state{font-size:13px;font-weight:700;color:var(--blue)}
+.cb-xs{display:flex;flex-direction:column;gap:10px}
+.cb-x{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.cb-x b{display:block;font-size:15px}
+.cb-x small{color:var(--ink-2);font-size:13px}
+.cb-x-r{display:flex;align-items:center;gap:14px}
+.cb-x-r strong{font-size:18px}
+.cb-x-r button{min-height:40px;min-width:104px;padding:0 16px;border-radius:999px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;border:2px solid var(--ink);background:transparent;color:var(--ink)}
+.cb-x-r button[aria-pressed="true"]{border-color:var(--blue);background:var(--blue);color:#fff}
+.cb-sum{flex:1 1 320px;min-width:0;background:#0B2A52;color:#fff;border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.cb-sum h3{margin:0;font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#F7B267}
+.cb-sum .cb-sel{font-size:24px;font-weight:800;line-height:1.1}
+.cb-sum ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:14px;color:#E3E9F5}
+.cb-sum li{display:flex;gap:8px}
+.cb-sum li::before{content:"✓";color:#F7B267;font-weight:800}
+.cb-lines{border-top:1px solid #34456B;padding-top:12px;display:flex;flex-direction:column;gap:6px;font-size:14px;color:#E3E9F5}
+.cb-lines div{display:flex;justify-content:space-between;gap:10px}
+.cb-total{border-top:1px solid #34456B;padding-top:12px}
+.cb-total div{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.cb-total strong{font-size:34px;font-weight:800;letter-spacing:-.02em}
+.cb-total small{display:block;text-align:right;color:#A8E6BE;margin-top:2px;font-size:13.5px}
+.cb-add{min-height:48px;border-radius:8px;border:0;background:#F7B267;color:#2B1600;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
+.cb-add:hover{background:#FFC587}
+.cb-note{font-size:12px;color:#B9C4DB;text-align:center}
+.combos button:focus-visible{outline:3px solid #2F86E0;outline-offset:2px}
+@media (max-width:860px){.cb-tiles{grid-template-columns:1fr}.cb-tile{min-height:0}.cb-eq{margin-left:0}.cb-head h2{font-size:28px}}
+
 /* ---------- cart ---------- */
 .cart-layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;align-items:start}
 .panel{background:var(--surface);border-radius:8px;box-shadow:var(--shadow)}
@@ -410,6 +458,8 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
 
   <!-- TIENDA -->
   <main id="v-tienda" class="wrap hidden">
+    <section class="combos" id="combos" aria-labelledby="cb-title"></section>
+
     <section class="diag" aria-labelledby="diag-title">
       <div>
         <h2 id="diag-title">¿Qué le pasa a tu compu?</h2>
@@ -765,7 +815,7 @@ function cardHTML(i){
     <div class="card-actions">${act}</div></div></article>`;
 }
 function renderStore(){
-  renderCats(); renderSymptoms();
+  renderCats(); renderCombos(); renderSymptoms();
   const l=visible();
   $('#res-title').textContent = state.q ? `Resultados para “${state.q}”` : (state.cat==='Todas'?'Todos los servicios':state.cat);
   $('#res-count').textContent = `${l.length} ${l.length===1?'servicio':'servicios'} · precios orientativos, no incluyen repuestos ni licencias`;
@@ -785,6 +835,62 @@ function renderSymptoms(){
    <div class="plan-foot"><div class="plan-total">${fmt(tot)}<small>${items.length} servicios · mano de obra</small></div><button class="btn btn-primary" id="plan-add">Agregar todo al carrito</button></div>`;
   $('#plan-add').onclick=()=>{items.forEach(i=>cart[i.id]=(cart[i.id]||0)||1);save();renderStore();renderCount();toast(`${items.length} servicios agregados al carrito`)};
 }
+/* ---------- combos (Elegí tu combo) ---------- */
+const COMBOS=[
+ {k:'punto',t:'Puesta a punto',d:'Para la PC lenta o ruidosa.',s:[['Diagnóstico general de PC de escritorio','Diagnóstico general de notebook'],['Limpieza interna PC de escritorio','Limpieza interna notebook'],'Optimización de inicio y rendimiento','Instalación de antivirus']},
+ {k:'renov',t:'Renovación total',d:'Como nueva y con tus archivos a salvo.',s:['Respaldo de datos hasta 100 GB','Instalación limpia de Windows (licencia aparte)','Instalación de drivers','Instalación de aplicaciones básicas','Instalación de antivirus']},
+ {k:'hogar',t:'Hogar y empresa',d:'Soporte en tu casa u oficina.',s:[['Mantenimiento preventivo completo PC','Mantenimiento preventivo completo notebook'],'Inventario y relevamiento de equipos','Visita técnica a domicilio (zona urbana)','Soporte remoto']}
+];
+const COMBO_EXTRAS=['Hora adicional a domicilio','Hora adicional de soporte remoto','Configuración de copias de seguridad'];
+const cbState={base:'renov',eq:'pc',x:new Set()};
+const cbItems=c=>c.s.map(x=>Array.isArray(x)?x[cbState.eq==='nb'?1:0]:x).map(findByName).filter(Boolean);
+const cbSum=a=>a.reduce((t,i)=>t+i.price,0);
+function cbSelection(){
+  const avail=COMBOS.filter(c=>cbItems(c).length);
+  if(avail.length&&!avail.some(c=>c.k===cbState.base)) cbState.base=avail[0].k;
+  const sel=avail.find(c=>c.k===cbState.base)||null;
+  const base=sel?cbItems(sel):[];
+  const xs=COMBO_EXTRAS.map((n,k)=>({k,i:findByName(n)})).filter(x=>x.i);
+  const on=xs.filter(x=>cbState.x.has(x.k)).map(x=>x.i);
+  return {avail,sel,base,xs,on,total:cbSum(base)+cbSum(on)};
+}
+function renderCombos(){
+  const host=$('#combos'); if(!host) return;
+  const a=document.activeElement;
+  const fk=a&&host.contains(a)?a.getAttributeNames().find(n=>/^data-c(b|eq|x)$/.test(n)):null;
+  const fv=fk?a.getAttribute(fk):null;
+  const S=cbSelection();
+  if(!S.sel){host.hidden=true;return;}
+  host.hidden=false;
+  const tiles=S.avail.map(c=>{const on=c.k===S.sel.k;return `<button type="button" class="cb-tile${on?' on':''}" data-cb="${c.k}" aria-pressed="${on}"><span class="cb-name">${esc(c.t)}</span><span class="cb-desc">${esc(c.d)}</span><span class="cb-price">${fmt(cbSum(cbItems(c)))}</span><span class="cb-state">${on?'Seleccionado':'Elegir'}</span></button>`}).join('');
+  const xs=S.xs.map(x=>`<div class="cb-x"><div><b>${esc(x.i.name)}</b><small>${esc(x.i.unit||'')}</small></div><div class="cb-x-r"><strong>${fmt(x.i.price)}</strong><button type="button" data-cx="${x.k}" aria-pressed="${cbState.x.has(x.k)}">${cbState.x.has(x.k)?'Quitar':'Agregar'}</button></div></div>`).join('');
+  const lines=`<div><span>${esc(S.sel.t)}</span><b>${fmt(cbSum(S.base))}</b></div>`+S.on.map(i=>`<div><span>${esc(i.name)}</span><b>${fmt(i.price)}</b></div>`).join('');
+  host.innerHTML=`<div class="cb-head"><h2 id="cb-title">Elegí tu combo</h2><span class="cb-pill">Precios sugeridos</span></div>
+  <p class="cb-sub">Elegí una base, sumá lo que necesites y mirá el total al instante. No incluye repuestos ni licencias.</p>
+  <div class="cb-layout"><div class="cb-main">
+    <div><h3 class="cb-step"><b>1</b>Elegí la base<span class="cb-eq" role="group" aria-label="Tipo de equipo"><button type="button" data-ceq="pc" aria-pressed="${cbState.eq==='pc'}">PC de escritorio</button><button type="button" data-ceq="nb" aria-pressed="${cbState.eq==='nb'}">Notebook</button></span></h3><div class="cb-tiles">${tiles}</div></div>
+    ${xs?`<div><h3 class="cb-step"><b>2</b>Sumá extras <small>(opcional)</small></h3><div class="cb-xs">${xs}</div></div>`:''}
+  </div>
+  <aside class="cb-sum" aria-label="Resumen de tu combo" aria-live="polite"><h3>Tu combo</h3><div class="cb-sel">${esc(S.sel.t)}</div>
+    <ul>${S.base.map(i=>`<li>${esc(i.name)}</li>`).join('')}</ul>
+    <div class="cb-lines">${lines}</div>
+    <div class="cb-total"><div><span>Total sugerido</span><strong>${fmt(S.total)}</strong></div><small>3 cuotas sin interés de ${fmt(S.total/3)}</small></div>
+    <button type="button" class="cb-add" id="combo-add">Agregar combo al carrito</button>
+    <div class="cb-note">Precios sugeridos · no incluyen repuestos ni licencias</div></aside></div>`;
+  if(fk){const el=host.querySelector(`[${fk}="${fv}"]`); if(el) el.focus();}
+}
+$('#combos').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.cb){cbState.base=b.dataset.cb;renderCombos();}
+  else if(b.dataset.ceq){cbState.eq=b.dataset.ceq;renderCombos();}
+  else if(b.dataset.cx!==undefined){const k=+b.dataset.cx;cbState.x.has(k)?cbState.x.delete(k):cbState.x.add(k);renderCombos();}
+  else if(b.id==='combo-add'){
+    const S=cbSelection(); const its=[...S.base,...S.on];
+    its.forEach(i=>{cart[i.id]=(cart[i.id]||0)||1});
+    save();renderStore();renderCount();toast(`Combo agregado al carrito (${its.length} servicios)`);
+  }
+});
+
 document.addEventListener('click',e=>{
   const t=e.target.closest('button'); if(!t) return;
   if(t.dataset.cat){state.cat=t.dataset.cat;state.page=1;if(location.hash!=='#/tienda'&&location.hash!==''){location.hash='#/tienda'}else{renderStore();window.scrollTo({top:0})}}
