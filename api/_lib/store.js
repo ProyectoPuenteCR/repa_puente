@@ -36,30 +36,62 @@ export async function listOrders(limit = 60) {
   return out;
 }
 
+/* ---- usuarios (db/users.json en el Blob) ---- */
+const USERS = 'db/users.json';
+export const ROLES = ['admin', 'visitante'];
+const hashPass = (pass, salt = crypto.randomBytes(16).toString('hex')) => ({ salt, hash: crypto.scryptSync(String(pass), salt, 64).toString('hex') });
+export const publicUser = (u) => ({ user: u.user, name: u.name || '', role: u.role, createdAt: u.createdAt, createdBy: u.createdBy || null });
+export async function getUsers() {
+  const db = await readJSON(USERS).catch((e) => { console.error('users read', e); return null; });
+  return db && Array.isArray(db.users) ? db.users : [];
+}
+export async function saveUsers(users) { await writeJSON(USERS, { users, updatedAt: new Date().toISOString() }); return users; }
+export function newUser({ user, name, pass, role }, by) {
+  return { user, name, role, ...hashPass(pass), createdAt: new Date().toISOString(), createdBy: by || null };
+}
+export function setPass(u, pass) { Object.assign(u, hashPass(pass)); return u; }
+
 /* ---- auth: HMAC-signed cookie ---- */
 // Sin SESSION_SECRET se deriva del token del Blob (secreto que Vercel crea al conectar el store).
 const SECRET = process.env.SESSION_SECRET || (process.env.BLOB_READ_WRITE_TOKEN ? crypto.createHash('sha256').update('pp-session:' + process.env.BLOB_READ_WRITE_TOKEN).digest('hex') : '');
 const COOKIE = 'pp_session';
 const sign = (v) => crypto.createHmac('sha256', SECRET).update(v).digest('base64url');
-export function sessionCookie(user) {
+const eq = (a, b) => { const x = Buffer.from(String(a)), y = Buffer.from(String(b)); return x.length === y.length && crypto.timingSafeEqual(x, y); };
+
+export function sessionCookie(session) {
   if (!SECRET) throw Object.assign(new Error('Falta SESSION_SECRET o conectar el Blob store.'), { status: 503 });
   const exp = Date.now() + 12 * 3600e3;
-  const payload = Buffer.from(JSON.stringify({ u: user, exp })).toString('base64url');
+  const payload = Buffer.from(JSON.stringify({ u: session.user, n: session.name || '', r: session.role, exp })).toString('base64url');
   return `${COOKIE}=${payload}.${sign(payload)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${12 * 3600}`;
 }
 export const clearCookie = () => `${COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;
-export function isAdmin(request) {
-  if (!SECRET) return false;
+
+/** Devuelve { user, name, role } si la cookie es válida, o null. */
+export function getSession(request) {
+  if (!SECRET) return null;
   const raw = (request.headers.get('cookie') || '').split(/;\s*/).find((c) => c.startsWith(COOKIE + '='));
-  if (!raw) return false;
+  if (!raw) return null;
   const [payload, sig] = raw.slice(COOKIE.length + 1).split('.');
-  if (!payload || !sig) return false;
-  const good = sign(payload);
-  if (sig.length !== good.length || !crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(good))) return false;
-  try { return JSON.parse(Buffer.from(payload, 'base64url').toString()).exp > Date.now(); } catch { return false; }
+  if (!payload || !sig || !eq(sig, sign(payload))) return null;
+  try {
+    const s = JSON.parse(Buffer.from(payload, 'base64url').toString());
+    if (!(s.exp > Date.now())) return null;
+    return { user: s.u, name: s.n || '', role: ROLES.includes(s.r) ? s.r : 'admin' };
+  } catch { return null; }
 }
-export function checkLogin(user, pass) {
-  const U = process.env.ADMIN_USER || 'admin', P = process.env.ADMIN_PASS || 'Admin';
-  const eq = (a, b) => { const x = Buffer.from(String(a)), y = Buffer.from(String(b)); return x.length === y.length && crypto.timingSafeEqual(x, y); };
-  return eq(String(user).toLowerCase(), U.toLowerCase()) & eq(pass, P);
+export const isAdmin = (request) => getSession(request)?.role === 'admin';
+
+/**
+ * Valida usuario y contraseña. Busca primero en los usuarios del Blob;
+ * la cuenta de ADMIN_USER / ADMIN_PASS (variables de entorno) queda siempre como administrador de respaldo.
+ */
+export async function checkLogin(user, pass) {
+  const name = String(user).trim().toLowerCase();
+  const u = (await getUsers()).find((x) => x.user === name);
+  if (u) {
+    const h = crypto.scryptSync(String(pass), u.salt, 64).toString('hex');
+    return eq(h, u.hash) ? { user: u.user, name: u.name, role: u.role } : null;
+  }
+  const U = (process.env.ADMIN_USER || 'admin').toLowerCase(), P = process.env.ADMIN_PASS || 'Admin';
+  return eq(name, U) & eq(pass, P) ? { user: U, name: 'Administrador', role: 'admin' } : null;
 }
