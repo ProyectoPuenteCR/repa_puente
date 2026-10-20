@@ -28,7 +28,7 @@ export const seedCatalog = () => structuredClone(seed);
 
 export async function saveOrder(order) { await writeJSON(`orders/${order.id}.json`, order); return order; }
 export async function getOrder(id) { return readJSON(`orders/${id}.json`); }
-export async function listOrders(limit = 60) {
+export async function listOrders(limit = 200) {
   const { blobs } = await list({ prefix: 'orders/', limit: 1000 });
   blobs.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
   const out = [];
@@ -36,18 +36,36 @@ export async function listOrders(limit = 60) {
   return out;
 }
 
+/* ---- configuración editable por el administrador (db/config.json) ---- */
+const CONFIG = 'db/config.json';
+export const CONFIG_DEFAULTS = {
+  whatsapp: '2974711779',
+  notifyEmail: process.env.NOTIFY_EMAIL || '',
+  botGreeting: '¡Hola! Soy el asistente de Puente Service. ¿En qué te puedo ayudar? Elegí una opción y seguimos por WhatsApp.',
+  mpLink: process.env.MP_LINK || 'https://link.mercadopago.com.ar/repopuente',
+};
+export async function getConfig() {
+  const c = await readJSON(CONFIG).catch((e) => { console.error('config read', e); return null; });
+  return { ...CONFIG_DEFAULTS, ...(c || {}) };
+}
+export async function saveConfig(cfg) { await writeJSON(CONFIG, { ...cfg, updatedAt: new Date().toISOString() }); return cfg; }
+
+/** Solo dígitos; saca el 0 inicial de larga distancia. */
+export const cleanPhone = (v) => String(v || '').replace(/\D/g, '').replace(/^0+/, '').slice(0, 15);
+export const ORDER_ID = /^PP-[A-Z0-9-]{4,40}$/;
+
 /* ---- usuarios (db/users.json en el Blob) ---- */
 const USERS = 'db/users.json';
 export const ROLES = ['admin', 'visitante'];
 const hashPass = (pass, salt = crypto.randomBytes(16).toString('hex')) => ({ salt, hash: crypto.scryptSync(String(pass), salt, 64).toString('hex') });
-export const publicUser = (u) => ({ user: u.user, name: u.name || '', role: u.role, createdAt: u.createdAt, createdBy: u.createdBy || null });
+export const publicUser = (u) => ({ user: u.user, name: u.name || '', role: u.role, phone: u.phone || '', address: u.address || '', createdAt: u.createdAt, createdBy: u.createdBy || null });
 export async function getUsers() {
   const db = await readJSON(USERS).catch((e) => { console.error('users read', e); return null; });
   return db && Array.isArray(db.users) ? db.users : [];
 }
 export async function saveUsers(users) { await writeJSON(USERS, { users, updatedAt: new Date().toISOString() }); return users; }
-export function newUser({ user, name, pass, role }, by) {
-  return { user, name, role, ...hashPass(pass), createdAt: new Date().toISOString(), createdBy: by || null };
+export function newUser({ user, name, pass, role, phone = '', address = '' }, by) {
+  return { user, name, role, phone, address, ...hashPass(pass), createdAt: new Date().toISOString(), createdBy: by || null };
 }
 export function setPass(u, pass) { Object.assign(u, hashPass(pass)); return u; }
 
