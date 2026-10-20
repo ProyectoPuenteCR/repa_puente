@@ -220,6 +220,34 @@ td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 
 .st{display:inline-block;font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--surface-2);text-transform:capitalize}
 .st-pagado{background:#DFF5E8;color:#0A7A3C}.st-rechazado,.st-cancelado{background:#FDE3E1;color:#B3261E}.st-pendiente{background:#FFF1D6;color:#8A5A00}
+.st-devuelto{background:var(--surface-2);color:var(--ink-2)}
+select.st{border:0;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:20px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 10px) 52%,calc(100% - 6px) 52%;background-size:4px 4px;background-repeat:no-repeat}
+/* usuarios */
+.users-layout{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start}
+@media (max-width:860px){.users-layout{grid-template-columns:1fr}}
+.users-form{padding:18px 20px}
+.role-pick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.role-pick label{display:block;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;background:var(--surface)}
+.role-pick label:has(input:checked){border-color:var(--blue);background:var(--blue-soft)}
+.role-pick input{position:absolute;opacity:0;pointer-events:none}
+.role-pick b{display:block;font-size:14px}
+.role-pick small{display:block;font-size:12px;color:var(--ink-2);margin-top:2px;line-height:1.3}
+.role-pick label:focus-within{outline:3px solid var(--blue);outline-offset:2px}
+.rl{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px}
+.rl-admin{background:#E6EEF8;color:#0050A0}.rl-visitante{background:var(--surface-2);color:var(--ink-2)}
+:root[data-theme="dark"] .rl-admin{background:#1C2A3B;color:#5AA2F0}
+.u-actions{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap}
+.u-actions .btn{padding:6px 9px;font-size:13px}
+.btn-danger{background:transparent;color:var(--red);padding:6px 9px}
+.who{font-size:13px;color:var(--hdr-muted);white-space:nowrap}
+@media (max-width:700px){.who{display:none}}
+/* pago con link fijo */
+.pay-amount{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1.5px dashed var(--mp);border-radius:8px;padding:10px 12px;margin:10px 0}
+.pay-amount b{font-size:26px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;white-space:nowrap}
+.pay-amount .btn{white-space:nowrap;flex-shrink:0}
+.pay-steps{margin:10px 0 4px;padding-left:20px;font-size:14px;color:var(--ink-2)}
+.pay-steps li{margin:4px 0}.pay-steps b{color:var(--ink)}
+
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:#1F1F1F;color:#fff;padding:12px 18px;border-radius:8px;font-size:14px;opacity:0;transition:.2s;z-index:50;pointer-events:none;max-width:90vw}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid #0050A0;margin-top:32px;padding:36px 0 calc(24px + env(safe-area-inset-bottom,0px));font-size:14px}
@@ -274,13 +302,13 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
 <section id="v-login" class="login hidden" aria-labelledby="login-title">
   <form class="login-card" id="login-form" novalidate>
     <img class="login-logo" src="/logo.png" alt="Proyecto Puente">
-    <h1 id="login-title">Ingresá como administrador</h1>
+    <h1 id="login-title">Ingresá a Puente Service</h1>
     <p class="lead">Reparación y soporte de computadoras en Comodoro Rivadavia.</p>
     <label class="field"><span>Usuario</span><input id="lg-user" autocomplete="username" required></label>
     <label class="field"><span>Contraseña</span><input id="lg-pass" type="password" autocomplete="current-password" required></label>
     <p class="err" id="lg-err" role="alert"></p>
     <button class="btn btn-primary btn-block" type="submit">Ingresar</button>
-    <p class="hint">Acceso solo para administración. <button type="button" class="btn btn-ghost" id="lg-back" style="padding:0">Volver a la tienda</button></p>
+    <p class="hint">¿No tenés usuario? Pedíselo al administrador. <button type="button" class="btn btn-ghost" id="lg-back" style="padding:0">Volver a la tienda</button></p>
   </form>
 </section>
 
@@ -299,9 +327,11 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
           <button type="submit" aria-label="Buscar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
         </form>
         <nav class="nav-actions">
-          <a class="nav-btn" data-nav="admin" href="#/admin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg><span class="lbl">Precios</span></a>
+          <a class="nav-btn admin-only" data-nav="usuarios" href="#/usuarios"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.8c1.6.8 2.7 2.5 3 5.2"/></svg><span class="lbl">Usuarios</span></a>
+          <a class="nav-btn admin-only" data-nav="admin" href="#/admin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg><span class="lbl">Precios</span></a>
           <a class="nav-btn" data-nav="carrito" href="#/carrito" aria-label="Carrito"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><span class="cart-count" id="cart-count">0</span></a>
           <button class="nav-btn" id="theme" title="Cambiar a tema oscuro" aria-label="Cambiar tema"><svg id="theme-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+          <span class="who" id="who"></span>
           <button class="nav-btn" id="logout" title="Cerrar sesión"><span class="lbl">Salir</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></button>
         </nav>
       </div>
@@ -361,10 +391,39 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
         <div class="sum-row total"><span>Total</span><span id="sum-total">$ 0</span></div>
         <button class="btn btn-mp btn-block" id="mp-btn" style="margin-top:14px">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c3-4 7-6 10-6s7 2 10 6c-3 4-7 6-10 6S5 16 2 12z"/><path d="M8 12h8"/></svg>
-          Generar link de Mercado Pago
+          <span id="mp-btn-lbl">Pagar con Mercado Pago</span>
         </button>
         <div id="mp-out"></div>
       </aside>
+    </div>
+  </main>
+
+  <!-- USUARIOS -->
+  <main id="v-usuarios" class="wrap hidden">
+    <div class="admin-head">
+      <div><h1>Usuarios</h1><p>Los administradores editan precios, ven pedidos y gestionan usuarios. Los visitantes solo eligen servicios, arman el carrito y pagan.</p></div>
+    </div>
+    <div class="users-layout">
+      <section class="panel" aria-labelledby="uf-title">
+        <div class="panel-head" id="uf-title">Nuevo usuario</div>
+        <form class="users-form" id="u-form" novalidate>
+          <label class="field"><span>Usuario</span><input id="u-user" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Ej.: jperez" required></label>
+          <label class="field"><span>Nombre y apellido</span><input id="u-name" autocomplete="off" placeholder="Ej.: Juan Pérez"></label>
+          <label class="field"><span>Contraseña (mínimo 8 caracteres)</span>
+            <div style="display:flex;gap:6px"><input id="u-pass" type="text" autocomplete="new-password" spellcheck="false" required style="flex:1"><button type="button" class="btn btn-soft" id="u-gen" style="padding:8px 12px;white-space:nowrap">Generar</button></div></label>
+          <fieldset style="border:0;padding:0;margin:0"><legend style="margin:0 0 5px;font-size:13px;color:var(--ink-2)">Rol</legend>
+            <div class="role-pick">
+              <label><input type="radio" name="u-role" value="visitante" checked><b>Visitante</b><small>Elige servicios, arma el carrito y paga</small></label>
+              <label><input type="radio" name="u-role" value="admin"><b>Administrador</b><small>Además edita precios, pedidos y usuarios</small></label>
+            </div></fieldset>
+          <p class="err" id="u-err" role="alert"></p>
+          <button class="btn btn-primary btn-block" type="submit" id="u-submit">Crear usuario</button>
+        </form>
+      </section>
+      <section class="panel" aria-labelledby="ul-title">
+        <div class="panel-head"><span id="ul-title">Usuarios creados</span><button class="btn btn-ghost" id="u-reload">Actualizar</button></div>
+        <div id="u-list"></div>
+      </section>
     </div>
   </main>
 
@@ -444,7 +503,7 @@ const SS = {
   set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}},
   del(k){try{sessionStorage.removeItem(k)}catch(e){}}
 };
-let mem = {auth:false};
+let mem = {auth:false, session:null};
 const clone = o => JSON.parse(JSON.stringify(o));
 let DB = {items:[],hours:[]};
 let cart = LS.get('pp_cart_v1', {});
@@ -493,35 +552,53 @@ const SYMPTOMS = [
 const findByName = n => DB.items.find(i=>i.name===n && i.active && i.price!=null);
 
 /* ---------- auth & routing ---------- */
-const isAuth = () => mem.auth;
+const isAuth = () => mem.auth;            // administrador
+const isLogged = () => !!mem.session;      // cualquier usuario
+const ADMIN_VIEWS = ['admin','usuarios'];
+let afterLogin = null;
 function route(){
   const r = (location.hash.replace('#/','')||'tienda');
-  if(r==='admin' && !isAuth()){ show('login'); return; }
-  if(r==='login'){ show(isAuth()?'admin':'login'); return; }
-  show(['tienda','carrito','admin'].includes(r)?r:'tienda');
+  if(ADMIN_VIEWS.includes(r) && !isAuth()){
+    if(isLogged()){ toast('Esa sección es solo para administradores'); location.hash='#/tienda'; return; }
+    afterLogin = r; show('login'); return;
+  }
+  if(r==='login'){ if(isLogged()){ location.hash = isAuth()?'#/admin':'#/tienda'; return; } show('login'); return; }
+  show(['tienda','carrito',...ADMIN_VIEWS].includes(r)?r:'tienda');
 }
 function show(v){
   $('#v-login').classList.toggle('hidden', v!=='login');
   $('#app').classList.toggle('hidden', v==='login');
-  ['tienda','carrito','admin'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
+  ['tienda','carrito','admin','usuarios'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
   document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active',a.dataset.nav===v));
   if(v==='login'){ setTimeout(()=>$('#lg-user').focus(),30); return; }
   renderCats();
   if(v==='tienda') renderStore();
   if(v==='carrito') renderCart();
   if(v==='admin') renderAdmin();
+  if(v==='usuarios') renderUsers();
   renderCount(); window.scrollTo(0,0);
 }
 $('#login-form').addEventListener('submit',e=>{
   e.preventDefault();
   const u=$('#lg-user').value.trim(), p=$('#lg-pass').value;
   api('/api/login',{method:'POST',body:JSON.stringify({user:u,pass:p})})
-   .then(()=>{mem.auth=true;$('#lg-err').textContent='';$('#lg-pass').value='';authUI();location.hash='#/admin';route();toast('Sesión iniciada')})
+   .then(s=>{setSession(s);$('#lg-err').textContent='';$('#lg-pass').value='';
+     const go = afterLogin || (s.role==='admin'?'admin':'tienda'); afterLogin=null;
+     location.hash='#/'+go; route(); toast(`Hola${s.name?', '+s.name.split(' ')[0]:''}`)})
    .catch(err=>{$('#lg-err').textContent=err.message||'No se pudo iniciar sesión.'});
 });
 $('#lg-back').onclick=()=>{location.hash='#/tienda'};
-function authUI(){$('#logout .lbl').textContent=mem.auth?'Salir':'Ingresar';$('#logout').title=mem.auth?'Cerrar sesión':'Ingresar como administrador';}
-$('#logout').onclick=async()=>{ if(!mem.auth){location.hash='#/admin';return;} try{await api('/api/logout',{method:'POST'})}catch(e){} mem.auth=false;authUI();location.hash='#/tienda';route();toast('Sesión cerrada')};
+function setSession(s){ mem.session = s && s.user ? {user:s.user,name:s.name||'',role:s.role} : null; mem.auth = mem.session?.role==='admin'; authUI(); }
+function authUI(){
+  const s=mem.session;
+  $('#logout .lbl').textContent=s?'Salir':'Ingresar';
+  $('#logout').title=s?'Cerrar sesión':'Ingresar con tu usuario';
+  $('#who').textContent=s?(s.name||s.user)+(s.role==='admin'?' (admin)':''):'';
+  document.querySelectorAll('.admin-only').forEach(el=>el.classList.toggle('hidden',!mem.auth));
+  if(s && !$('#cli-name').value) $('#cli-name').value=s.name||'';
+}
+function sessionLost(){ setSession(null); afterLogin=(location.hash.replace('#/','')||'tienda'); show('login'); toast('Tu sesión venció. Ingresá de nuevo.'); }
+$('#logout').onclick=async()=>{ if(!isLogged()){location.hash='#/login';return;} try{await api('/api/logout',{method:'POST'})}catch(e){} setSession(null);$('#cli-name').value='';location.hash='#/tienda';route();toast('Sesión cerrada')};
 window.addEventListener('hashchange',route);
 
 /* ---------- store ---------- */
@@ -621,28 +698,88 @@ function renderCart(){
     `<div class="sum-row" style="color:var(--green)"><span>En 3 cuotas sin interés</span><span>${fmt(total/3)}</span></div>`;
   $('#sum-total').textContent=fmt(total);
   $('#mp-btn').disabled=!lines.length; $('#mp-btn').style.opacity=lines.length?1:.5;
+  $('#mp-btn-lbl').textContent=isLogged()?'Pagar con Mercado Pago':'Ingresá para pagar';
   $('#mp-out').innerHTML='';
 }
 $('#opt-home').onchange=renderCart;
 $('#cart-clear').onclick=()=>{cart={};save();refresh()};
 $('#mp-btn').onclick=async()=>{
   const {lines}=totals(); if(!lines.length) return;
-  const btn=$('#mp-btn'); btn.disabled=true; const old=btn.innerHTML; btn.textContent='Generando link…';
+  if(!isLogged()){ afterLogin='carrito'; location.hash='#/login'; return; }
+  const btn=$('#mp-btn'); btn.disabled=true; const old=btn.innerHTML; btn.textContent='Generando pedido…';
   let res;
   try{ res=await api('/api/checkout',{method:'POST',body:JSON.stringify({items:lines.map(x=>({id:x.i.id,q:x.q})),home:$('#opt-home').checked,name:$('#cli-name').value,email:$('#cli-mail').value})}); }
-  catch(e){ toast(e.message); btn.disabled=false; btn.innerHTML=old; return; }
+  catch(e){ btn.disabled=false; btn.innerHTML=old; if(e.status===401){ afterLogin='carrito'; sessionLost(); return; } toast(e.message); return; }
   btn.disabled=false; btn.innerHTML=old;
-  const ref=res.id, total=res.total, link=res.link, pref=res.preference;
+  const ref=res.id, total=res.total, link=res.link, amount=String(Math.round(total));
+  const exact = res.mode==='real'||res.mode==='prueba';
   $('#mp-out').innerHTML=`<div class="mp-result">
-    <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><path d="m5 12 5 5 9-10"/></svg>Link generado · ${fmt(total)}</h4>
-    <div style="font-size:13px;color:var(--ink-2)">Pedido ${ref} guardado. ${res.mode==='demo'?'Link de demostración: falta cargar MP_ACCESS_TOKEN en Vercel para cobrar de verdad.':res.mode==='prueba'?'Link de Mercado Pago en modo prueba.':'Link de pago real de Mercado Pago.'}</div>
-    ${res.mode!=='demo'?`<a class="btn btn-mp btn-block" style="margin-top:10px;text-decoration:none" href="${esc(link)}">Pagar ahora</a>`:''}
-    <div class="mp-link"><input readonly value="${esc(link)}" aria-label="Link de pago" id="mp-link"><button class="btn btn-soft" id="mp-copy" style="padding:8px 12px">Copiar</button></div>
+    <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><path d="m5 12 5 5 9-10"/></svg>Pedido ${esc(ref)} registrado</h4>
+    ${exact?`<div style="font-size:13px;color:var(--ink-2)">El link ya tiene cargado el total de ${fmt(total)}.</div>`:`
+    <div class="pay-amount"><div><small style="color:var(--ink-2);display:block">Monto a pagar</small><b id="mp-amount">${fmt(total)}</b></div><button class="btn btn-soft" id="mp-copy-amt" style="padding:8px 12px">Copiar monto</button></div>
+    <ol class="pay-steps">
+      <li>Tocá <b>Ir a Mercado Pago</b>.</li>
+      <li>Escribí el monto: <b>${fmt(total)}</b>.</li>
+      <li>En el detalle o mensaje poné el pedido <b>${esc(ref)}</b>.</li>
+    </ol>`}
+    <a class="btn btn-mp btn-block" style="margin-top:10px;text-decoration:none" href="${esc(link)}" target="_blank" rel="noopener">Ir a Mercado Pago</a>
+    <div class="mp-link"><input readonly value="${esc(link)}" aria-label="Link de pago" id="mp-link"><button class="btn btn-soft" id="mp-copy" style="padding:8px 12px">Copiar link</button></div>
     <div class="qr" id="mp-qr"></div>
-    <details class="json"><summary>Ver preferencia (POST /checkout/preferences)</summary><pre>${esc(JSON.stringify(pref,null,2))}</pre></details></div>`;
+    <div style="font-size:12.5px;color:var(--ink-2);margin-top:8px">Cuando verifiquemos el pago te contactamos para coordinar el servicio.</div></div>`;
   try{ new QRCode($('#mp-qr'),{text:link,width:150,height:150}); }catch(e){ $('#mp-qr').remove(); }
-  $('#mp-copy').onclick=async()=>{try{await navigator.clipboard.writeText(link);toast('Link copiado')}catch(e){$('#mp-link').select();toast('Seleccioná y copiá el link')}};
+  const copy=async(txt,msg,inp)=>{try{await navigator.clipboard.writeText(txt);toast(msg)}catch(e){if(inp){inp.select()}toast('Seleccioná y copiá a mano')}};
+  $('#mp-copy').onclick=()=>copy(link,'Link copiado',$('#mp-link'));
+  if($('#mp-copy-amt')) $('#mp-copy-amt').onclick=()=>copy(amount,`Monto copiado: ${amount}`);
 };
+
+/* ---------- usuarios ---------- */
+let USERS=[];
+const genPass=()=>{const a='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';const r=crypto.getRandomValues(new Uint32Array(12));return Array.from(r,x=>a[x%a.length]).join('')};
+async function renderUsers(){
+  const box=$('#u-list'); box.innerHTML='<div class="empty" style="box-shadow:none">Cargando usuarios…</div>';
+  try{ USERS=(await api('/api/users')).users; }
+  catch(e){ if(e.status===401) return sessionLost(); box.innerHTML=`<div class="empty" style="box-shadow:none">${esc(e.message)}</div>`; return; }
+  const me=mem.session?.user;
+  box.innerHTML = USERS.length ? `<div class="table-wrap"><table><thead><tr><th>Usuario</th><th>Rol</th><th>Alta</th><th style="text-align:right">Acciones</th></tr></thead><tbody>${
+    USERS.map(u=>`<tr><td><b>${esc(u.user)}</b>${u.user===me?' <small style="color:var(--ink-2)">(vos)</small>':''}<br><small style="color:var(--ink-2)">${esc(u.name||'—')}</small></td>
+      <td><span class="rl rl-${esc(u.role)}">${u.role==='admin'?'Administrador':'Visitante'}</span></td>
+      <td style="white-space:nowrap;font-size:13px;color:var(--ink-2)">${new Date(u.createdAt).toLocaleDateString('es-AR')}${u.createdBy?`<br>por ${esc(u.createdBy)}`:''}</td>
+      <td><div class="u-actions">
+        ${u.user!==me?`<button class="btn btn-ghost" data-urole="${esc(u.user)}">${u.role==='admin'?'Hacer visitante':'Hacer admin'}</button>`:''}
+        <button class="btn btn-ghost" data-upass="${esc(u.user)}">Cambiar contraseña</button>
+        ${u.user!==me?`<button class="btn btn-danger" data-udel="${esc(u.user)}">Borrar</button>`:''}
+      </div></td></tr>`).join('')}</tbody></table></div>`
+    : `<div class="empty" style="box-shadow:none">Todavía no hay usuarios creados.<br><small>Mientras tanto se entra con la cuenta de administrador de respaldo (ADMIN_USER y ADMIN_PASS en Vercel).</small></div>`;
+}
+$('#u-gen').onclick=()=>{$('#u-pass').value=genPass();$('#u-pass').select()};
+$('#u-reload').onclick=renderUsers;
+$('#u-user').addEventListener('input',e=>{const v=e.target.value.toLowerCase().replace(/\s+/g,'.').replace(/[^a-z0-9._-]/g,'');if(v!==e.target.value)e.target.value=v});
+$('#u-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const body={user:$('#u-user').value.trim(),name:$('#u-name').value.trim(),pass:$('#u-pass').value,role:document.querySelector('input[name="u-role"]:checked').value};
+  if(body.user.length<3){$('#u-err').textContent='El usuario debe tener al menos 3 caracteres.';$('#u-user').focus();return}
+  if(body.pass.length<8){$('#u-err').textContent='La contraseña debe tener al menos 8 caracteres.';$('#u-pass').focus();return}
+  $('#u-submit').disabled=true;
+  try{ await api('/api/users',{method:'POST',body:JSON.stringify(body)});
+    $('#u-err').textContent=''; e.target.reset();
+    toast(`Usuario ${body.user} creado. Pasale la contraseña por un canal privado.`); renderUsers();
+  }catch(err){ if(err.status===401) return sessionLost(); $('#u-err').textContent=err.message; }
+  finally{ $('#u-submit').disabled=false; }
+});
+$('#u-list').addEventListener('click',async e=>{
+  const t=e.target.closest('button'); if(!t) return;
+  try{
+    if(t.dataset.urole){ const u=USERS.find(x=>x.user===t.dataset.urole); const role=u.role==='admin'?'visitante':'admin';
+      if(!confirm(`¿Cambiar a ${u.user} a ${role==='admin'?'administrador':'visitante'}?`)) return;
+      await api('/api/users',{method:'PATCH',body:JSON.stringify({user:u.user,role})}); toast('Rol actualizado'); }
+    else if(t.dataset.upass){ const p=prompt(`Nueva contraseña para ${t.dataset.upass} (mínimo 8 caracteres):`, genPass()); if(p==null) return;
+      await api('/api/users',{method:'PATCH',body:JSON.stringify({user:t.dataset.upass,pass:p})}); toast('Contraseña actualizada'); }
+    else if(t.dataset.udel){ if(!confirm(`¿Borrar el usuario ${t.dataset.udel}? No se puede deshacer.`)) return;
+      await api('/api/users?user='+encodeURIComponent(t.dataset.udel),{method:'DELETE'}); toast('Usuario borrado'); }
+    else return;
+    renderUsers();
+  }catch(err){ if(err.status===401) return sessionLost(); toast(err.message); }
+});
 
 /* ---------- admin ---------- */
 const aState={q:'',cat:'Todas'};
@@ -668,9 +805,14 @@ function renderAdmin(){
 async function loadOrders(){
   const box=$('#orders'); box.innerHTML='<div class="empty" style="box-shadow:none">Cargando pedidos…</div>';
   try{const {orders}=await api('/api/orders');
-    box.innerHTML=orders.length?`<div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Servicios</th><th style="text-align:right">Total</th><th>Estado</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${esc(o.id)}</td><td style="white-space:nowrap">${new Date(o.createdAt).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'})}</td><td>${esc(o.name||'—')}<br><small style="color:var(--ink-2)">${esc(o.email||'')}</small></td><td style="font-size:13px">${o.lines.map(l=>esc(l.title)+(l.quantity>1?' ×'+l.quantity:'')).join('<br>')}</td><td class="num">${fmt(o.total)}</td><td><span class="st st-${esc(o.status)}">${esc(o.status)}</span>${o.mode==='demo'?' <small style="color:var(--ink-2)">demo</small>':''}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty" style="box-shadow:none">Todavía no hay pedidos. Se crean cuando alguien genera un link de pago desde el carrito.</div>';
+    box.innerHTML=orders.length?`<div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Servicios</th><th style="text-align:right">Total</th><th>Estado</th></tr></thead><tbody>${orders.map(o=>`<tr><td>${esc(o.id)}</td><td style="white-space:nowrap">${new Date(o.createdAt).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'})}</td><td>${esc(o.name||'—')}<br><small style="color:var(--ink-2)">${esc([o.user,o.email].filter(Boolean).join(' / '))}</small></td><td style="font-size:13px">${o.lines.map(l=>esc(l.title)+(l.quantity>1?' ×'+l.quantity:'')).join('<br>')}</td><td class="num">${fmt(o.total)}</td><td><select class="st st-${esc(o.status)}" data-oid="${esc(o.id)}" aria-label="Estado del pedido ${esc(o.id)}">${['pendiente','pagado','cancelado','devuelto'].map(x=>`<option ${x===o.status?'selected':''}>${x}</option>`).join('')}${['pendiente','pagado','cancelado','devuelto'].includes(o.status)?'':`<option selected>${esc(o.status)}</option>`}</select>${o.mode==='demo'?' <small style="color:var(--ink-2)">demo</small>':''}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty" style="box-shadow:none">Todavía no hay pedidos. Se crean cuando un usuario toca “Pagar con Mercado Pago” en el carrito. Como el link de cobro es fijo, marcá cada pedido como pagado cuando veas el ingreso en Mercado Pago.</div>';
   }catch(e){box.innerHTML=`<div class="empty" style="box-shadow:none">${esc(e.message)}</div>`}
 }
+$('#orders').addEventListener('change',async e=>{
+  const t=e.target; if(!t.dataset.oid) return;
+  try{ await api('/api/orders',{method:'PATCH',body:JSON.stringify({id:t.dataset.oid,status:t.value})}); t.className='st st-'+t.value; toast(`Pedido ${t.dataset.oid}: ${t.value}`); }
+  catch(err){ if(err.status===401) return sessionLost(); toast(err.message); loadOrders(); }
+});
 function renderRows(){
   $('#a-body').innerHTML=aVisible().map(d=>{
     const o=byId(d.id), op=o?.price, ch=!o||op!==d.price||o.active!==d.active;
@@ -701,7 +843,7 @@ $('#b-apply').onclick=()=>{
   l.forEach(d=>{const o=byId(d.id);const base=o?.price??d.price;d.price=Math.round(base*(1+p/100)/r)*r});
   renderRows();updateDirty();toast(`Ajuste de ${p>0?'+':''}${p}% aplicado a ${l.length} servicios`);
 };
-$('#save').onclick=async()=>{const n=dirtyCount();$('#save').disabled=true;try{DB=await api('/api/catalog',{method:'PUT',body:JSON.stringify({items:draft.items,hours:draft.hours})});draft=null;renderAdmin();toast(`Guardado: ${n} ${n===1?'cambio':'cambios'} publicados en la tienda`)}catch(e){if(e.status===401){mem.auth=false;authUI();route()}toast(e.message);updateDirty()}};
+$('#save').onclick=async()=>{const n=dirtyCount();$('#save').disabled=true;try{DB=await api('/api/catalog',{method:'PUT',body:JSON.stringify({items:draft.items,hours:draft.hours})});draft=null;renderAdmin();toast(`Guardado: ${n} ${n===1?'cambio':'cambios'} publicados en la tienda`)}catch(e){if(e.status===401){sessionLost();return}toast(e.message);updateDirty()}};
 $('#discard').onclick=()=>{draft=null;renderAdmin();toast('Cambios descartados')};
 $('#reset-all').onclick=async()=>{if(!confirm('¿Restaurar todos los precios a la lista original del Excel?'))return;try{DB=await api('/api/catalog',{method:'PUT',body:JSON.stringify({reset:true})});draft=null;renderAdmin();toast('Lista original restaurada')}catch(e){toast(e.message)}};
 $('#add-toggle').onclick=()=>{$('#add-panel').classList.toggle('hidden');$('#n-name').focus()};
@@ -719,8 +861,7 @@ const SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1
 function setTheme(m){document.documentElement.setAttribute('data-theme',m);LS.set('pp_theme',m);$('#theme-ic').innerHTML=m==='dark'?SUN:MOON;$('#theme').title=m==='dark'?'Cambiar a tema claro':'Cambiar a tema oscuro';}
 setTheme(LS.get('pp_theme','light'));
 (async()=>{
-  try{const me=await api('/api/me');mem.auth=!!me.admin;}catch(e){}
-  authUI();
+  try{const me=await api('/api/me');setSession(me.session);}catch(e){setSession(null)}
   try{DB=await api('/api/catalog');SEEDP=DB.seedPrices||{};}catch(e){toast('No se pudo cargar el catálogo. Probá recargar la página.')}
   const pago=new URLSearchParams(location.search).get('pago');
   if(pago){ if(pago==='aprobado'){cart={};save();} history.replaceState(null,'',location.pathname+location.hash); setTimeout(()=>toast(pago==='aprobado'?'¡Pago aprobado! Te contactamos para coordinar el servicio.':pago==='pendiente'?'Tu pago quedó pendiente de acreditación.':'El pago no se completó. Podés intentar de nuevo.'),300); }
