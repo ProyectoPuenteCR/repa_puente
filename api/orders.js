@@ -1,7 +1,9 @@
-import { json, fail, getSession, listOrders, getOrder, saveOrder, deleteOrder, getConfig, ORDER_ID } from './_lib/store.js';
+import { json, fail, getSession, listOrders, getOrder, saveOrder, deleteOrder, getConfig, taskKey, ORDER_ID } from './_lib/store.js';
 const STATUS = ['pendiente', 'aceptado', 'pagado', 'terminado', 'cancelado', 'devuelto'];
-const INTERNAL = ['obs', 'workDone', 'techId', 'techName', 'techNotifiedAt']; // datos internos: el cliente no los ve
+const INTERNAL = ['obs', 'workDone', 'techId', 'techName', 'techNotifiedAt', 'techResponse', 'techRespondedAt']; // datos internos: el cliente no los ve
 const stripInternal = (o) => { const c = { ...o }; INTERNAL.forEach((k) => delete c[k]); return c; };
+// Link personal para que el técnico abra y acepte la tarea (solo lo ve el administrador).
+const withLink = (o, origin) => ({ ...o, taskUrl: `${origin}/t/${o.id}?k=${taskKey(o.id)}` });
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const text = (v, n) => String(v ?? '').trim().slice(0, n);
 
@@ -12,7 +14,7 @@ export async function GET(request) {
   try {
     const mine = s.role !== 'admin' || new URL(request.url).searchParams.get('mine') === '1';
     const orders = await listOrders(mine ? 500 : 300);
-    if (!mine) return json({ orders });
+    if (!mine) { const origin = new URL(request.url).origin; return json({ orders: orders.map((o) => withLink(o, origin)) }); }
     // Solo pedidos asociados a la cuenta (no por celular: cualquiera podría pedir con un celular ajeno).
     return json({ orders: orders.filter((o) => o.user === s.user).map(stripInternal) });
   } catch (e) { return fail(e); }
@@ -47,16 +49,17 @@ export async function PATCH(request) {
 
     if ('techId' in b) {
       const techId = text(b.techId, 40);
-      if (!techId) { delete o.techId; delete o.techName; delete o.techNotifiedAt; }
+      if (!techId) { for (const k of ['techId', 'techName', 'techNotifiedAt', 'techResponse', 'techRespondedAt']) delete o[k]; }
       else if (techId !== o.techId) {
         const t = ((await getConfig()).technicians || []).find((x) => x.id === techId);
         if (!t) return json({ error: 'Ese técnico no existe. Cargalo en Configuración.' }, 400);
-        o.techId = t.id; o.techName = t.name; delete o.techNotifiedAt;
+        o.techId = t.id; o.techName = t.name;
+        for (const k of ['techNotifiedAt', 'techResponse', 'techRespondedAt']) delete o[k];
       }
     }
     if (b.notifyTech && o.techId) o.techNotifiedAt = now;
     o.updatedAt = now;
-    return json({ ok: true, order: await saveOrder(o) });
+    return json({ ok: true, order: withLink(await saveOrder(o), new URL(request.url).origin) });
   } catch (e) { return fail(e); }
 }
 
