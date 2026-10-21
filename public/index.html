@@ -230,6 +230,17 @@ dialog.dlg::backdrop{background:rgba(10,20,40,.55)}
 .tk-center{text-align:center}
 .tarea button:focus-visible,.tarea a:focus-visible{outline:3px solid #2F86E0;outline-offset:2px}
 
+/* ---------- precios por categoría ---------- */
+.a-chips{display:flex;gap:8px;overflow-x:auto;padding:12px 20px;border-bottom:1px solid var(--line)}
+.a-chips button{flex:none;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.a-chips button em{font-style:normal;color:var(--ink-2);font-weight:500;margin-left:6px}
+.a-chips button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.a-chips button.on em{color:#fff}
+tr.cat-row td{background:var(--surface-2);font-weight:800;font-size:15px;padding:12px 16px;border-top:2px solid var(--line)}
+tr.cat-row small{font-weight:500;color:var(--ink-2);margin-left:8px;font-size:13px}
+.a-sub{display:block;font-size:12.5px;color:var(--ink-2);margin-top:2px;max-width:60ch;font-weight:400}
+.od-lines small{display:block;color:var(--ink-2);font-size:12.5px;font-weight:400}
+
 /* ---------- combos ---------- */
 .combos{margin-bottom:20px}
 .cb-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:6px}
@@ -730,16 +741,16 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
     <section class="panel">
       <div class="toolbar">
         <label class="field grow"><span>Buscar</span><input id="a-q" type="search" placeholder="Nombre del servicio"></label>
-        <label class="field"><span>Categoría</span><select id="a-cat"></select></label>
         <div class="bulk">
           <div><label for="b-pct">Ajuste masivo %</label><input id="b-pct" inputmode="decimal" placeholder="Ej.: 8"></div>
           <div><label for="b-round">Redondear a</label><select id="b-round" style="border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface)"><option value="1">Sin redondeo</option><option value="500">$ 500</option><option value="1000" selected>$ 1.000</option></select></div>
           <button class="btn btn-primary" id="b-apply" style="padding:9px 14px">Aplicar a la vista</button>
         </div>
       </div>
+      <div class="a-chips" id="a-chips" role="group" aria-label="Categorías de servicios"></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Servicio</th><th>Categoría</th><th>Unidad</th><th style="text-align:right">Precio publicado</th><th style="text-align:right">Nuevo precio</th><th style="text-align:right">Variación</th><th>Visible</th></tr></thead>
+          <thead><tr><th>Servicio</th><th>Unidad</th><th style="text-align:right">Precio publicado</th><th style="text-align:right">Nuevo precio</th><th style="text-align:right">Variación</th><th>Visible</th></tr></thead>
           <tbody id="a-body"></tbody>
         </table>
       </div>
@@ -908,9 +919,10 @@ $('#logout').onclick=async()=>{ if(!isLogged()){location.hash='#/login';return;}
 window.addEventListener('hashchange',route);
 
 /* ---------- store ---------- */
-const cats = () => [...new Set(DB.items.map(i=>i.cat))];
+const COMBO_CAT='Combos';
+const cats = () => [...new Set(DB.items.filter(i=>i.cat!==COMBO_CAT).map(i=>i.cat))];
 function visible(){
-  let l = DB.items.filter(i=>i.active);
+  let l = DB.items.filter(i=>i.active&&i.cat!==COMBO_CAT);
   if(state.cat!=='Todas') l=l.filter(i=>i.cat===state.cat);
   if(state.q){const q=norm(state.q).split(/\s+/);l=l.filter(i=>q.every(w=>norm(i.name+' '+i.cat).includes(w)))}
   const mn=parseFloat($('#pmin').value.replace(/\D/g,''))||0, mx=parseFloat($('#pmax').value.replace(/\D/g,''))||Infinity;
@@ -923,7 +935,7 @@ function visible(){
   return l;
 }
 function renderCats(){
-  const all=DB.items.filter(i=>i.active), list=['Todas',...cats()];
+  const all=DB.items.filter(i=>i.active&&i.cat!==COMBO_CAT), list=['Todas',...cats()];
   const cnt=c=>c==='Todas'?all.length:all.filter(i=>i.cat===c).length;
   $('#cat-list').innerHTML=list.map(c=>`<li><button class="${c===state.cat?'on':''}" data-cat="${esc(c)}">${esc(c)} <em>${cnt(c)}</em></button></li>`).join('');
   $('#catnav').innerHTML=list.map(c=>`<button class="${c===state.cat?'on':''}" data-cat="${esc(c)}">${c==='Todas'?'Todos los servicios':esc(c)}</button>`).join('');
@@ -963,23 +975,23 @@ function renderSymptoms(){
   $('#plan-add').onclick=()=>{items.forEach(i=>cart[i.id]=(cart[i.id]||0)||1);save();renderStore();renderCount();toast(`${items.length} servicios agregados al carrito`)};
 }
 /* ---------- combos (Elegí tu combo) ---------- */
+// Cada combo es un servicio del catálogo (categoría "Combos"): su precio se edita en Precios.
 const COMBOS=[
- {k:'punto',t:'Puesta a punto',d:'Para la PC lenta o ruidosa.',s:[['Diagnóstico general de PC de escritorio','Diagnóstico general de notebook'],['Limpieza interna PC de escritorio','Limpieza interna notebook'],'Optimización de inicio y rendimiento','Instalación de antivirus']},
- {k:'renov',t:'Renovación total',d:'Como nueva y con tus archivos a salvo.',s:['Respaldo de datos hasta 100 GB','Instalación limpia de Windows (licencia aparte)','Instalación de drivers','Instalación de aplicaciones básicas','Instalación de antivirus']},
- {k:'hogar',t:'Hogar y empresa',d:'Soporte en tu casa u oficina.',s:[['Mantenimiento preventivo completo PC','Mantenimiento preventivo completo notebook'],'Inventario y relevamiento de equipos','Visita técnica a domicilio (zona urbana)','Soporte remoto']}
+ {k:'punto',t:'Puesta a punto',d:'Para la PC lenta o ruidosa.',n:{pc:'Combo Puesta a punto · PC de escritorio',nb:'Combo Puesta a punto · Notebook'}},
+ {k:'renov',t:'Renovación total',d:'Como nueva y con tus archivos a salvo.',n:'Combo Renovación total'},
+ {k:'hogar',t:'Hogar y empresa',d:'Soporte en tu casa u oficina.',n:{pc:'Combo Hogar y empresa · PC de escritorio',nb:'Combo Hogar y empresa · Notebook'}}
 ];
 const COMBO_EXTRAS=['Hora adicional a domicilio','Hora adicional de soporte remoto','Configuración de copias de seguridad'];
 const cbState={base:'renov',eq:'pc',x:new Set()};
-const cbItems=c=>c.s.map(x=>Array.isArray(x)?x[cbState.eq==='nb'?1:0]:x).map(findByName).filter(Boolean);
-const cbSum=a=>a.reduce((t,i)=>t+i.price,0);
+const cbItem=c=>findByName(typeof c.n==='string'?c.n:c.n[cbState.eq==='nb'?'nb':'pc']);
+const cbIncl=i=>String(i.note||'').replace(/^Incluye:\s*/,'').split(' · ').filter(Boolean);
 function cbSelection(){
-  const avail=COMBOS.filter(c=>cbItems(c).length);
-  if(avail.length&&!avail.some(c=>c.k===cbState.base)) cbState.base=avail[0].k;
-  const sel=avail.find(c=>c.k===cbState.base)||null;
-  const base=sel?cbItems(sel):[];
+  const avail=COMBOS.map(c=>({c,i:cbItem(c)})).filter(x=>x.i);
+  if(avail.length&&!avail.some(x=>x.c.k===cbState.base)) cbState.base=avail[0].c.k;
+  const sel=avail.find(x=>x.c.k===cbState.base)||null;
   const xs=COMBO_EXTRAS.map((n,k)=>({k,i:findByName(n)})).filter(x=>x.i);
   const on=xs.filter(x=>cbState.x.has(x.k)).map(x=>x.i);
-  return {avail,sel,base,xs,on,total:cbSum(base)+cbSum(on)};
+  return {avail,sel,xs,on,total:(sel?sel.i.price:0)+on.reduce((t,i)=>t+i.price,0)};
 }
 function renderCombos(){
   const host=$('#combos'); if(!host) return;
@@ -989,17 +1001,17 @@ function renderCombos(){
   const S=cbSelection();
   if(!S.sel){host.hidden=true;return;}
   host.hidden=false;
-  const tiles=S.avail.map(c=>{const on=c.k===S.sel.k;return `<button type="button" class="cb-tile${on?' on':''}" data-cb="${c.k}" aria-pressed="${on}"><span class="cb-name">${esc(c.t)}</span><span class="cb-desc">${esc(c.d)}</span><span class="cb-price">${fmt(cbSum(cbItems(c)))}</span><span class="cb-state">${on?'Seleccionado':'Elegir'}</span></button>`}).join('');
+  const tiles=S.avail.map(x=>{const on=x.c.k===S.sel.c.k;return `<button type="button" class="cb-tile${on?' on':''}" data-cb="${x.c.k}" aria-pressed="${on}"><span class="cb-name">${esc(x.c.t)}</span><span class="cb-desc">${esc(x.c.d)}</span><span class="cb-price">${fmt(x.i.price)}</span><span class="cb-state">${on?'Seleccionado':'Elegir'}</span></button>`}).join('');
   const xs=S.xs.map(x=>`<div class="cb-x"><div><b>${esc(x.i.name)}</b><small>${esc(x.i.unit||'')}</small></div><div class="cb-x-r"><strong>${fmt(x.i.price)}</strong><button type="button" data-cx="${x.k}" aria-pressed="${cbState.x.has(x.k)}">${cbState.x.has(x.k)?'Quitar':'Agregar'}</button></div></div>`).join('');
-  const lines=`<div><span>${esc(S.sel.t)}</span><b>${fmt(cbSum(S.base))}</b></div>`+S.on.map(i=>`<div><span>${esc(i.name)}</span><b>${fmt(i.price)}</b></div>`).join('');
+  const lines=`<div><span>${esc(S.sel.c.t)}</span><b>${fmt(S.sel.i.price)}</b></div>`+S.on.map(i=>`<div><span>${esc(i.name)}</span><b>${fmt(i.price)}</b></div>`).join('');
   host.innerHTML=`<div class="cb-head"><h2 id="cb-title">Elegí tu combo</h2><span class="cb-pill">Precios sugeridos</span></div>
   <p class="cb-sub">Elegí una base, sumá lo que necesites y mirá el total al instante. No incluye repuestos ni licencias.</p>
   <div class="cb-layout"><div class="cb-main">
     <div><h3 class="cb-step"><b>1</b>Elegí la base<span class="cb-eq" role="group" aria-label="Tipo de equipo"><button type="button" data-ceq="pc" aria-pressed="${cbState.eq==='pc'}">PC de escritorio</button><button type="button" data-ceq="nb" aria-pressed="${cbState.eq==='nb'}">Notebook</button></span></h3><div class="cb-tiles">${tiles}</div></div>
     ${xs?`<div><h3 class="cb-step"><b>2</b>Sumá extras <small>(opcional)</small></h3><div class="cb-xs">${xs}</div></div>`:''}
   </div>
-  <aside class="cb-sum" aria-label="Resumen de tu combo" aria-live="polite"><h3>Tu combo</h3><div class="cb-sel">${esc(S.sel.t)}</div>
-    <ul>${S.base.map(i=>`<li>${esc(i.name)}</li>`).join('')}</ul>
+  <aside class="cb-sum" aria-label="Resumen de tu combo" aria-live="polite"><h3>Tu combo</h3><div class="cb-sel">${esc(S.sel.c.t)}</div>
+    <ul>${cbIncl(S.sel.i).map(n=>`<li>${esc(n)}</li>`).join('')}</ul>
     <div class="cb-lines">${lines}</div>
     <div class="cb-total"><div><span>Total sugerido</span><strong>${fmt(S.total)}</strong></div><small>3 cuotas sin interés de ${fmt(S.total/3)}</small></div>
     <button type="button" class="cb-add" id="combo-add">Agregar combo al carrito</button>
@@ -1012,9 +1024,9 @@ $('#combos').addEventListener('click',e=>{
   else if(b.dataset.ceq){cbState.eq=b.dataset.ceq;renderCombos();}
   else if(b.dataset.cx!==undefined){const k=+b.dataset.cx;cbState.x.has(k)?cbState.x.delete(k):cbState.x.add(k);renderCombos();}
   else if(b.id==='combo-add'){
-    const S=cbSelection(); const its=[...S.base,...S.on];
+    const S=cbSelection(); const its=[S.sel.i,...S.on];
     its.forEach(i=>{cart[i.id]=(cart[i.id]||0)||1});
-    save();renderStore();renderCount();toast(`Combo agregado al carrito (${its.length} servicios)`);
+    save();renderStore();renderCount();toast(`Combo agregado al carrito (${its.length} ${its.length===1?'ítem':'ítems'})`);
   }
 });
 
@@ -1202,13 +1214,12 @@ function aVisible(){
 function dirtyCount(){ return draft.items.filter(d=>{const o=byId(d.id);return !o||o.price!==d.price||o.active!==d.active}).length + (JSON.stringify(draft.hours)!==JSON.stringify(DB.hours)?1:0) }
 function renderAdmin(){
   ensureDraft();
-  const opts=['Todas',...cats()].map(c=>`<option ${c===aState.cat?'selected':''}>${esc(c)}</option>`).join('');
-  $('#a-cat').innerHTML=opts; $('#n-cat').innerHTML=cats().map(c=>`<option>${esc(c)}</option>`).join('');
-  const priced=DB.items.filter(i=>i.price!=null);
+  renderChips(); $('#n-cat').innerHTML=cats().map(c=>`<option>${esc(c)}</option>`).join('');
+  const svc=DB.items.filter(i=>i.cat!==COMBO_CAT), priced=svc.filter(i=>i.price!=null);
   const avg=priced.reduce((a,i)=>a+i.price,0)/priced.length;
-  const base=Object.values(SEEDP).filter(v=>v!=null), baseAvg=base.length?base.reduce((a,v)=>a+v,0)/base.length:avg;
+  const base=svc.map(i=>SEEDP[i.id]).filter(v=>v!=null), baseAvg=base.length?base.reduce((a,v)=>a+v,0)/base.length:avg;
   const chg=((avg/baseAvg)-1)*100;
-  $('#stats').innerHTML=`<div class="stat"><span>Servicios publicados</span><b>${DB.items.filter(i=>i.active).length}</b></div>
+  $('#stats').innerHTML=`<div class="stat"><span>Servicios publicados</span><b>${svc.filter(i=>i.active).length}</b></div>
    <div class="stat"><span>Categorías</span><b>${cats().length}</b></div>
    <div class="stat"><span>Precio promedio</span><b>${fmt(avg)}</b></div>
    <div class="stat"><span>Variación vs. lista Excel</span><b style="color:${chg>0.05?'var(--green)':chg<-0.05?'var(--red)':'inherit'}">${chg>=0?'+':''}${chg.toFixed(1)}%</b></div>`;
@@ -1248,7 +1259,7 @@ function renderOrders(){
   $('#orders').innerHTML=list.length?`<div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Falla / servicio solicitado</th><th>Técnico</th><th>Inicio · Fin</th><th style="text-align:right">Total</th><th>Estado</th><th></th></tr></thead><tbody>${list.map(o=>`<tr data-row="${esc(o.id)}" class="ord-row" title="Clic para abrir el pedido">
     <td style="white-space:nowrap"><b>${esc(o.id)}</b><br><small style="color:var(--ink-2)">${fStamp(o.createdAt)}</small></td>
     <td class="cli"><b>${esc(orderName(o))}</b>${o.phone?`<small>${esc(fmtPhone(o.phone))}</small>`:''}${o.address?`<small>${esc(o.address)}</small>`:''}</td>
-    <td style="font-size:13px">${o.lines.map(l=>esc(l.title)+(l.quantity>1?' ×'+l.quantity:'')).join('<br>')}${o.detalle?`<div class="det">“${esc(o.detalle)}”</div>`:''}</td>
+    <td style="font-size:13px">${o.lines.map(l=>esc(l.title)+(l.quantity>1?' ×'+l.quantity:'')+(l.detail?`<div class="det">${esc(l.detail)}</div>`:'')).join('<br>')}${o.detalle?`<div class="det">“${esc(o.detalle)}”</div>`:''}</td>
     <td class="ord-tech">${o.techName?esc(o.techName)+(o.techResponse==='aceptada'?'<small>Aceptó</small>':o.techResponse==='rechazada'?'<small>Rechazó</small>':o.techNotifiedAt?'<small>Avisado</small>':''):'<small>Sin asignar</small>'}</td>
     <td style="white-space:nowrap;font-size:13px">${fDate(o.startDate)}<br>${fDate(o.endDate)}</td>
     <td class="num">${fmt(o.total)}</td>
@@ -1300,7 +1311,7 @@ function renderDlg(){
     <div class="od-box"><h3>Cliente</h3><p><b>${esc(orderName(o))}</b></p>${o.phone?`<p>${esc(fmtPhone(o.phone))}</p>`:''}${o.address?`<p>${esc(o.address)}</p>`:''}${o.email?`<p>${esc(o.email)}</p>`:''}${o.user?`<p>Usuario: ${esc(o.user)}</p>`:''}</div>
     <div class="od-box"><h3>Pedido</h3><p>Recibido: ${fStamp(o.createdAt)}</p><p>${o.home?'Servicio a domicilio':'Se entrega el equipo en el taller'}</p>${o.acceptedAt?`<p>Aceptado: ${fStamp(o.acceptedAt)}</p>`:''}${o.techNotifiedAt?`<p>Técnico avisado: ${fStamp(o.techNotifiedAt)}</p>`:''}${o.techRespondedAt?`<p><b>Técnico ${o.techResponse==='aceptada'?'aceptó':'rechazó'}: ${fStamp(o.techRespondedAt)}</b></p>`:''}</div>
   </div>
-  <div class="od-box"><h3>Falla y servicios solicitados</h3><ul class="od-lines">${o.lines.map(l=>`<li><span>${esc(l.title)}${l.quantity>1?' ×'+l.quantity:''}</span><span>${fmt(l.unit_price*l.quantity)}</span></li>`).join('')}</ul><div class="od-total"><span>Total</span><span>${fmt(o.total)}</span></div>${o.detalle?`<p class="od-quote">“${esc(o.detalle)}”</p>`:''}</div>
+  <div class="od-box"><h3>Falla y servicios solicitados</h3><ul class="od-lines">${o.lines.map(l=>`<li><span>${esc(l.title)}${l.quantity>1?' ×'+l.quantity:''}${l.detail?`<small>${esc(l.detail)}</small>`:''}</span><span>${fmt(l.unit_price*l.quantity)}</span></li>`).join('')}</ul><div class="od-total"><span>Total</span><span>${fmt(o.total)}</span></div>${o.detalle?`<p class="od-quote">“${esc(o.detalle)}”</p>`:''}</div>
   <div class="od-edit">
     <h3>Reparación</h3>
     <label class="field"><span>Estado</span><select id="od-status">${ORD_ST.map(x=>`<option value="${x}" ${x===o.status?'selected':''}>${x}</option>`).join('')}${ORD_ST.includes(o.status)?'':`<option value="${esc(o.status)}" selected>${esc(o.status)}</option>`}</select></label>
@@ -1325,7 +1336,7 @@ function techMsg(o,f,t){
   if(o.phone) L.push(`Celular: ${fmtPhone(o.phone)}`);
   if(o.address) L.push(`Dirección: ${o.address}`);
   L.push(o.home?'Servicio a domicilio: sí':'Servicio a domicilio: no','','Falla / servicios:');
-  o.lines.forEach(l=>L.push(`- ${l.title}${l.quantity>1?' x'+l.quantity:''} (${fmt(l.unit_price*l.quantity)})`));
+  o.lines.forEach(l=>{ L.push(`- ${l.title}${l.quantity>1?' x'+l.quantity:''} (${fmt(l.unit_price*l.quantity)})`); if(l.detail) L.push(`  Incluye: ${l.detail}`); });
   L.push(`Total: ${fmt(o.total)}`);
   if(o.detalle) L.push('',`Detalle del cliente: ${o.detalle}`);
   if(f.startDate||f.endDate) L.push('',`Inicio: ${fDate(f.startDate)} · Fin: ${fDate(f.endDate)}`);
@@ -1434,7 +1445,7 @@ function drawTarea(){
         ${t.address?`<div>${esc(t.address)}</div>`:''}
         <div style="color:var(--ink-2);font-size:13.5px">${t.home?'Servicio a domicilio':'Se entrega el equipo en el taller'}</div>
         ${t.home&&t.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(t.address+', Comodoro Rivadavia')}" target="_blank" rel="noopener" style="font-weight:600">Cómo llegar</a>`:''}</div>
-      <div class="tk-card"><h3>Falla y servicios</h3>${t.lines.map(l=>`<div>${esc(l.title)}${l.quantity>1?' ×'+l.quantity:''}</div>`).join('')}${t.detalle?`<div style="font-style:italic;color:var(--ink-2)">“${esc(t.detalle)}”</div>`:''}</div>
+      <div class="tk-card"><h3>Falla y servicios</h3>${t.lines.map(l=>`<div>${esc(l.title)}${l.quantity>1?' ×'+l.quantity:''}${l.detail?`<div style="font-size:13.5px;color:var(--ink-2)">${esc(l.detail)}</div>`:''}</div>`).join('')}${t.detalle?`<div style="font-style:italic;color:var(--ink-2)">“${esc(t.detalle)}”</div>`:''}</div>
       <button class="btn btn-primary tk-btn" style="min-height:56px;font-size:18px;margin-top:6px" data-ans="accept">Aceptar tarea</button>
       <button class="btn tk-btn tk-out" data-ans="decline">No puedo tomarla</button>
       <div class="tk-center" style="font-size:12.5px;color:var(--ink-2)">Este link es personal. No hace falta usuario ni contraseña.</div>`;
@@ -1443,17 +1454,35 @@ function drawTarea(){
 }
 $('#tk-body').addEventListener('click',e=>{ const b=e.target.closest('button[data-ans]'); if(b) tkAnswer(b.dataset.ans,b); });
 
+function adminCats(){
+  const all=[...new Set((draft||DB).items.map(i=>i.cat))];
+  return [...all.filter(c=>c===COMBO_CAT),...all.filter(c=>c!==COMBO_CAT)];
+}
+function renderChips(){
+  const items=(draft||DB).items, all=['Todas',...adminCats()];
+  if(!all.includes(aState.cat)) aState.cat='Todas';
+  const cnt=c=>c==='Todas'?items.length:items.filter(i=>i.cat===c).length;
+  $('#a-chips').innerHTML=all.map(c=>`<button type="button" data-ac="${esc(c)}" class="${c===aState.cat?'on':''}" aria-pressed="${c===aState.cat}">${esc(c)}<em>${cnt(c)}</em></button>`).join('');
+}
 function renderRows(){
-  $('#a-body').innerHTML=aVisible().map(d=>{
+  const rows=aVisible(), order=aState.cat==='Todas'?adminCats():[aState.cat];
+  const price=n=>(draft.items.find(i=>i.name===n)?.price)||0;
+  const row=d=>{
     const o=byId(d.id), op=o?.price, ch=!o||op!==d.price||o.active!==d.active;
-    const dl=(op&&d.price!=null)?((d.price/op)-1)*100:null;
+    const dl=(op&&d.price!=null)?((d.price/op)-1)*100:null, combo=d.cat===COMBO_CAT;
     return `<tr class="${ch?'changed':''} ${d.active?'':'off'}">
-      <td>${esc(d.name)}</td><td style="color:var(--ink-2)">${esc(d.cat)}</td><td style="color:var(--ink-2);font-size:13px">${esc(d.unit||'')}</td>
+      <td>${esc(d.name)}${combo&&d.note?`<span class="a-sub">${esc(d.note)}</span>`:''}</td><td style="color:var(--ink-2);font-size:13px">${esc(d.unit||'')}${combo?`<span class="a-sub">Suma de los servicios: ${fmt(cbIncl(d).reduce((t,n)=>t+price(n),0))}</span>`:''}</td>
       <td class="num">${op!=null?fmt(op):(o?'A cotizar':'Nuevo')}</td>
       <td class="num"><input class="p" data-pid="${d.id}" inputmode="numeric" value="${d.price??''}" placeholder="A cotizar" aria-label="Nuevo precio de ${esc(d.name)}"></td>
       <td class="num">${dl!=null&&Math.abs(dl)>=.05?`<span class="delta ${dl>0?'up':'down'}">${dl>0?'+':''}${dl.toFixed(1)}%</span>`:'<span style="color:var(--ink-2)">—</span>'}</td>
-      <td><label class="switch"><input type="checkbox" data-act="${d.id}" ${d.active?'checked':''} aria-label="Visible en tienda"><span></span></label></td></tr>`}).join('')
-    || `<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--ink-2)">Ningún servicio coincide con la búsqueda.</td></tr>`;
+      <td><label class="switch"><input type="checkbox" data-act="${d.id}" ${d.active?'checked':''} aria-label="Visible en tienda"><span></span></label></td></tr>`;
+  };
+  const html=order.map(c=>{
+    const l=rows.filter(d=>d.cat===c); if(!l.length) return '';
+    const unit=c===COMBO_CAT?(l.length===1?'combo':'combos'):(l.length===1?'servicio':'servicios');
+    return `<tr class="cat-row"><td colspan="6">${esc(c)}<small>${l.length} ${unit}</small></td></tr>`+l.map(row).join('');
+  }).join('');
+  $('#a-body').innerHTML=html||`<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--ink-2)">Ningún servicio coincide con la búsqueda.</td></tr>`;
 }
 function renderHours(){
   $('#hours').innerHTML=draft.hours.map((h,k)=>`<label>${esc(h.t)}<input data-h="${k}" inputmode="numeric" value="${h.v}"><small style="display:block;margin-top:4px">${esc(h.n||'')}</small></label>`).join('');
@@ -1466,7 +1495,7 @@ $('#a-body').addEventListener('change',e=>{
 });
 $('#hours').addEventListener('change',e=>{const k=e.target.dataset.h;if(k!=null){draft.hours[k].v=+e.target.value.replace(/\D/g,'')||0;updateDirty()}});
 $('#a-q').oninput=e=>{aState.q=e.target.value;renderRows()};
-$('#a-cat').onchange=e=>{aState.cat=e.target.value;renderRows()};
+$('#a-chips').addEventListener('click',e=>{ const b=e.target.closest('button[data-ac]'); if(b){ aState.cat=b.dataset.ac; renderChips(); renderRows(); } });
 $('#b-apply').onclick=()=>{
   const p=parseFloat(($('#b-pct').value||'').replace(',','.')); if(isNaN(p)){toast('Escribí un porcentaje, por ejemplo 8 o -5');return}
   const r=+$('#b-round').value; const l=aVisible().filter(d=>d.price!=null);
