@@ -7,7 +7,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const view = (o) => ({
   id: o.id, techName: o.techName || '', response: o.techResponse || '', respondedAt: o.techRespondedAt || '',
   name: o.name || [o.nombre, o.apellido].filter(Boolean).join(' '), phone: o.phone || '', address: o.address || '',
-  home: !!o.home, detalle: o.detalle || '', lines: (o.lines || []).map((l) => ({ title: l.title, quantity: l.quantity })),
+  home: !!o.home, detalle: o.detalle || '', lines: (o.lines || []).map((l) => ({ title: l.title, quantity: l.quantity, detail: l.detail || '' })),
 });
 
 // El link lleva una clave firmada por pedido: sin ella (o con otra) no se devuelve nada. Mismo error en todos los casos.
