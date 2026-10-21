@@ -25,7 +25,7 @@ export async function POST(request) {
   const lines = (Array.isArray(b.items) ? b.items : []).slice(0, 50).map(({ id, q }) => {
     const it = db.items.find((i) => i.id === Number(id) && i.active && i.price != null);
     const qty = Math.min(20, Math.max(1, Math.floor(Number(q) || 0)));
-    return it ? { id: it.id, title: it.name, quantity: qty, unit_price: it.price } : null;
+    return it ? { id: it.id, title: it.name, quantity: qty, unit_price: it.price, ...(it.cat === 'Combos' && it.note ? { detail: String(it.note).replace(/^Incluye:\s*/, '') } : {}) } : null;
   }).filter(Boolean);
   if (!lines.length) return json({ error: 'Elegí al menos un servicio.' }, 400);
   if (b.home) {
