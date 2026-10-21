@@ -119,3 +119,7 @@ export async function checkLogin(user, pass) {
   const U = (process.env.ADMIN_USER || 'admin').toLowerCase(), P = process.env.ADMIN_PASS || 'Admin';
   return eq(name, U) & eq(pass, P) ? { user: U, name: 'Administrador', role: 'admin' } : null;
 }
+
+/* ---- link personal de la tarea del técnico: clave firmada por pedido (sin usuario ni contraseña) ---- */
+export const taskKey = (id) => (SECRET ? sign('task:' + id).slice(0, 22) : '');
+export const taskKeyOk = (id, k) => !!SECRET && !!k && eq(String(k), taskKey(id));
