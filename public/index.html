@@ -641,7 +641,7 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
   <!-- PEDIDOS -->
   <main id="v-pedidos" class="wrap hidden">
     <div class="admin-head">
-      <div><h1>Pedidos</h1><p>Buscá por cliente o por falla. Hacé doble clic en un pedido para ver todo el trabajo, asignar técnico y editarlo.</p></div>
+      <div><h1>Pedidos</h1><p>Buscá por cliente o por falla. Hacé clic en un pedido para ver todo el trabajo, asignar técnico y editarlo.</p></div>
     </div>
     <div class="stats" id="ord-stats"></div>
     <section class="panel" style="margin-bottom:16px" id="orders-panel">
@@ -1204,7 +1204,7 @@ function renderOrders(){
   const pend=n(['pendiente']);
   $('#ord-count').textContent=pend?`${pend} sin aceptar`:'';
   $('#ord-stats').innerHTML=`<div class="stat"><span>Pedidos</span><b>${ORDERS.length}</b></div><div class="stat"><span>Sin aceptar</span><b>${pend}</b></div><div class="stat"><span>En curso</span><b>${n(['aceptado','pagado'])}</b></div><div class="stat"><span>Terminados</span><b>${n(['terminado'])}</b></div>`;
-  $('#orders').innerHTML=list.length?`<div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Falla / servicio solicitado</th><th>Técnico</th><th>Inicio · Fin</th><th style="text-align:right">Total</th><th>Estado</th><th></th></tr></thead><tbody>${list.map(o=>`<tr data-row="${esc(o.id)}" class="ord-row" title="Doble clic para abrir el pedido">
+  $('#orders').innerHTML=list.length?`<div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Falla / servicio solicitado</th><th>Técnico</th><th>Inicio · Fin</th><th style="text-align:right">Total</th><th>Estado</th><th></th></tr></thead><tbody>${list.map(o=>`<tr data-row="${esc(o.id)}" class="ord-row" title="Clic para abrir el pedido">
     <td style="white-space:nowrap"><b>${esc(o.id)}</b><br><small style="color:var(--ink-2)">${fStamp(o.createdAt)}</small></td>
     <td class="cli"><b>${esc(orderName(o))}</b>${o.phone?`<small>${esc(fmtPhone(o.phone))}</small>`:''}${o.address?`<small>${esc(o.address)}</small>`:''}</td>
     <td style="font-size:13px">${o.lines.map(l=>esc(l.title)+(l.quantity>1?' ×'+l.quantity:'')).join('<br>')}${o.detalle?`<div class="det">“${esc(o.detalle)}”</div>`:''}</td>
@@ -1233,7 +1233,7 @@ $('#orders').addEventListener('click',e=>{
   else if(b.dataset.open) openOrder(b.dataset.open);
   else if(b.dataset.del) deleteOrder(b.dataset.del);
 });
-$('#orders').addEventListener('dblclick',e=>{ const tr=e.target.closest('tr[data-row]'); if(tr && !e.target.closest('select,button,a')) openOrder(tr.dataset.row); });
+$('#orders').addEventListener('click',e=>{ const tr=e.target.closest('tr[data-row]'); if(tr && !e.target.closest('select,button,a,option')) openOrder(tr.dataset.row); });
 $('#ord-filter').onchange=renderOrders;
 $('#ord-q').addEventListener('input',renderOrders);
 $('#ord-reload').onclick=loadOrders;
