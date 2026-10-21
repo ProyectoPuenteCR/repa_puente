@@ -199,6 +199,37 @@ dialog.dlg::backdrop{background:rgba(10,20,40,.55)}
 .tech-row .btn{padding:7px 12px;font-size:13px}
 @media (max-width:700px){.od-grid,.od-edit{grid-template-columns:1fr}.tech-form{grid-template-columns:1fr}}
 
+/* ---------- botón de WhatsApp con el técnico, link de la tarea ---------- */
+:root{--tech-img:url("data:image/jpeg;base64,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")}
+.wa-row{display:flex;align-items:center;gap:12px}
+.wa-tip{background:var(--surface);color:var(--ink);border-radius:12px;padding:10px 14px;box-shadow:0 6px 18px rgba(0,0,0,.2);font-size:14px;font-weight:600;line-height:1.3;max-width:150px}
+.wa:has(.wa-panel:not([hidden])) .wa-tip{display:none}
+.wa-fab.tech{position:relative;width:76px;height:76px;padding:0;background:var(--tech-img) center/cover no-repeat #1F9D55;border:3px solid #fff;box-sizing:border-box;display:block}
+.wa-fab.tech:hover{background:var(--tech-img) center/cover no-repeat #1F9D55;transform:scale(1.04)}
+.wa-badge{position:absolute;right:-5px;bottom:-3px;width:28px;height:28px;border-radius:50%;background:#1F9D55;border:2px solid #fff;display:grid;place-items:center;box-sizing:border-box}
+.wa-fab .wa-badge svg{width:15px;height:15px}
+.wa-head{background:#167A42}
+.wa-av.tech{width:46px;height:46px;background:var(--tech-img) center/cover no-repeat;border:2px solid #fff;box-sizing:border-box}
+@media (max-width:520px){.wa-tip{display:none}}
+.od-link{background:var(--blue-soft);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.od-link div{flex:1;min-width:0}
+.od-link b{display:block;font-size:13px;color:var(--blue)}
+.od-link span{display:block;font-size:13.5px;overflow-wrap:anywhere;margin-top:4px}
+.tarea{min-height:100%;background:var(--bg)}
+.tk-bar{background:var(--blue);color:#fff;display:flex;align-items:center;gap:10px;padding:12px 18px;font-size:18px;font-weight:800}
+.tk-wrap{max-width:480px;margin:0 auto;padding:16px 14px 36px;display:flex;flex-direction:column;gap:12px}
+.tk-eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--ink-2);text-transform:uppercase}
+.tk-name{font-size:24px;font-weight:800;margin:2px 0 0}
+.tk-card{background:var(--surface);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow);font-size:15px}
+.tk-card h3{margin:0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.tk-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tk-btn{min-height:52px;display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;font-size:16px;font-weight:700;border-radius:12px;padding:0 18px}
+.tk-out{background:transparent;border:1.5px solid var(--blue);color:var(--blue)}
+.tk-ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.tk-ok{width:84px;height:84px;border-radius:50%;background:#167A42;display:grid;place-items:center;margin:20px auto 4px}
+.tk-center{text-align:center}
+.tarea button:focus-visible,.tarea a:focus-visible{outline:3px solid #2F86E0;outline-offset:2px}
+
 /* ---------- combos ---------- */
 .combos{margin-bottom:20px}
 .cb-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:6px}
@@ -473,6 +504,12 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
   </form>
 </section>
 
+<!-- TAREA DEL TÉCNICO -->
+<section id="v-tarea" class="tarea hidden" aria-label="Tarea asignada">
+  <div class="tk-bar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17h18"/><path d="M5 17c0-5 3-8 7-8s7 3 7 8"/><path d="M12 9V5"/></svg>Puente Service</div>
+  <div class="tk-wrap" id="tk-body"></div>
+</section>
+
 <!-- APP -->
 <div id="app" class="hidden">
   <header class="top">
@@ -729,14 +766,15 @@ footer.site{background:var(--foot-bg);color:var(--foot-ink);border-top:4px solid
 
 <div class="wa hidden" id="wa">
   <div class="wa-panel" id="wa-panel" role="dialog" aria-label="Asistente de WhatsApp" hidden>
-    <div class="wa-head"><span class="wa-av"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 7V4M9 12h.01M15 12h.01M9.5 15.5h5"/></svg></span>
-      <div><b>Puente Service</b><small>Asistente · seguimos por WhatsApp</small></div>
+    <div class="wa-head"><span class="wa-av tech" aria-hidden="true"></span>
+      <div><b>Soporte técnico</b><small>Puente Service · responde por WhatsApp</small></div>
       <button class="wa-x" id="wa-close" aria-label="Cerrar">×</button></div>
     <div class="wa-body"><div class="wa-msg" id="wa-greet"></div><div class="wa-quick" id="wa-quick"></div></div>
     <form class="wa-input" id="wa-form"><input id="wa-text" placeholder="Escribí tu consulta…" aria-label="Tu consulta"><button aria-label="Enviar por WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4 21 12 3.4 3.6 3.4 10l12 2-12 2z"/></svg></button></form>
     <div class="wa-num" id="wa-num"></div>
   </div>
-  <button class="wa-fab" id="wa-fab" aria-label="Contactar por WhatsApp" aria-expanded="false" aria-controls="wa-panel"><svg viewBox="0 0 32 32" fill="none"><path d="M7 6h18a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H13l-6 5v-5H7a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3z" fill="currentColor" opacity=".22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12.6 10.2c.3-.5.9-.5 1.2 0l1 1.7c.2.4.1.8-.2 1.1l-.6.6c.6 1.1 1.4 1.9 2.5 2.5l.6-.6c.3-.3.7-.4 1.1-.2l1.7 1c.5.3.5.9 0 1.2l-.8.7c-.6.5-1.4.6-2.1.4-2.4-.9-4.2-2.7-5.1-5.1-.2-.7-.1-1.5.4-2.1z" fill="currentColor"/></svg></button>
+  <div class="wa-row"><span class="wa-tip">¿Te ayudo? Escribinos por WhatsApp</span>
+  <button class="wa-fab tech" id="wa-fab" aria-label="Contactar al técnico por WhatsApp" aria-expanded="false" aria-controls="wa-panel"><span class="wa-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.6-4.8A9 9 0 1 1 8 19.6L3 21z"/><path d="M9.3 8.2c-.3.6-.2 1.6.6 2.9s1.9 2.2 3.3 2.7c.7.2 1.4-.1 1.7-.7l.2-.5-1.8-.9-.7.7c-.8-.3-1.6-1-2-1.8l.6-.7-.8-1.8-.6.1z"/></svg></span></button></div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -808,6 +846,7 @@ const LOGGED_VIEWS = ['mis-pedidos'];
 const VIEWS = ['tienda','carrito','mis-pedidos','admin','pedidos','usuarios','config'];
 let afterLogin = null;
 function route(){
+  if(tkId()){ show('tarea'); return; }
   const full = (location.hash.replace('#/','')||'tienda');
   const [r, arg] = full.split('/');
   if((ADMIN_VIEWS.includes(r) && !isAuth()) || (LOGGED_VIEWS.includes(r) && !isLogged())){
@@ -821,11 +860,13 @@ function route(){
 }
 function show(v){
   $('#v-login').classList.toggle('hidden', v!=='login');
-  $('#app').classList.toggle('hidden', v==='login');
-  $('#wa').classList.toggle('hidden', v==='login');
+  $('#v-tarea').classList.toggle('hidden', v!=='tarea');
+  $('#app').classList.toggle('hidden', v==='login'||v==='tarea');
+  $('#wa').classList.toggle('hidden', v==='login'||v==='tarea');
   VIEWS.forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
   document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active',a.dataset.nav===v));
   if(v==='login'){ setTimeout(()=>$('#lg-user').focus(),30); return; }
+  if(v==='tarea'){ renderTarea(); window.scrollTo(0,0); return; }
   renderCats();
   if(v==='tienda') renderStore();
   if(v==='carrito') renderCart();
@@ -1208,7 +1249,7 @@ function renderOrders(){
     <td style="white-space:nowrap"><b>${esc(o.id)}</b><br><small style="color:var(--ink-2)">${fStamp(o.createdAt)}</small></td>
     <td class="cli"><b>${esc(orderName(o))}</b>${o.phone?`<small>${esc(fmtPhone(o.phone))}</small>`:''}${o.address?`<small>${esc(o.address)}</small>`:''}</td>
     <td style="font-size:13px">${o.lines.map(l=>esc(l.title)+(l.quantity>1?' ×'+l.quantity:'')).join('<br>')}${o.detalle?`<div class="det">“${esc(o.detalle)}”</div>`:''}</td>
-    <td class="ord-tech">${o.techName?esc(o.techName):'<small>Sin asignar</small>'}</td>
+    <td class="ord-tech">${o.techName?esc(o.techName)+(o.techResponse==='aceptada'?'<small>Aceptó</small>':o.techResponse==='rechazada'?'<small>Rechazó</small>':o.techNotifiedAt?'<small>Avisado</small>':''):'<small>Sin asignar</small>'}</td>
     <td style="white-space:nowrap;font-size:13px">${fDate(o.startDate)}<br>${fDate(o.endDate)}</td>
     <td class="num">${fmt(o.total)}</td>
     <td><select class="st st-${esc(o.status)}" data-oid="${esc(o.id)}" aria-label="Estado del pedido ${esc(o.id)}">${ORD_ST.map(x=>`<option value="${x}" ${x===o.status?'selected':''}>${x}</option>`).join('')}${ORD_ST.includes(o.status)?'':`<option selected>${esc(o.status)}</option>`}</select></td>
@@ -1254,16 +1295,17 @@ function openOrder(id){
 }
 function renderDlg(){
   const o=odCur, inList=TECHS.some(t=>t.id===o.techId);
-  $('#od-title').innerHTML=`Pedido ${esc(o.id)} <span class="st st-${esc(o.status)}">${esc(o.status)}</span>`;
+  $('#od-title').innerHTML=`Pedido ${esc(o.id)} <span class="st st-${esc(o.status)}">${esc(o.status)}</span>${o.techResponse==='aceptada'?' <span class="st st-pagado">Técnico aceptó</span>':o.techResponse==='rechazada'?' <span class="st st-cancelado">Técnico rechazó</span>':''}`;
   $('#od-body').innerHTML=`<div class="od-grid">
     <div class="od-box"><h3>Cliente</h3><p><b>${esc(orderName(o))}</b></p>${o.phone?`<p>${esc(fmtPhone(o.phone))}</p>`:''}${o.address?`<p>${esc(o.address)}</p>`:''}${o.email?`<p>${esc(o.email)}</p>`:''}${o.user?`<p>Usuario: ${esc(o.user)}</p>`:''}</div>
-    <div class="od-box"><h3>Pedido</h3><p>Recibido: ${fStamp(o.createdAt)}</p><p>${o.home?'Servicio a domicilio':'Se entrega el equipo en el taller'}</p>${o.acceptedAt?`<p>Aceptado: ${fStamp(o.acceptedAt)}</p>`:''}${o.techNotifiedAt?`<p>Técnico avisado: ${fStamp(o.techNotifiedAt)}</p>`:''}</div>
+    <div class="od-box"><h3>Pedido</h3><p>Recibido: ${fStamp(o.createdAt)}</p><p>${o.home?'Servicio a domicilio':'Se entrega el equipo en el taller'}</p>${o.acceptedAt?`<p>Aceptado: ${fStamp(o.acceptedAt)}</p>`:''}${o.techNotifiedAt?`<p>Técnico avisado: ${fStamp(o.techNotifiedAt)}</p>`:''}${o.techRespondedAt?`<p><b>Técnico ${o.techResponse==='aceptada'?'aceptó':'rechazó'}: ${fStamp(o.techRespondedAt)}</b></p>`:''}</div>
   </div>
   <div class="od-box"><h3>Falla y servicios solicitados</h3><ul class="od-lines">${o.lines.map(l=>`<li><span>${esc(l.title)}${l.quantity>1?' ×'+l.quantity:''}</span><span>${fmt(l.unit_price*l.quantity)}</span></li>`).join('')}</ul><div class="od-total"><span>Total</span><span>${fmt(o.total)}</span></div>${o.detalle?`<p class="od-quote">“${esc(o.detalle)}”</p>`:''}</div>
   <div class="od-edit">
     <h3>Reparación</h3>
     <label class="field"><span>Estado</span><select id="od-status">${ORD_ST.map(x=>`<option value="${x}" ${x===o.status?'selected':''}>${x}</option>`).join('')}${ORD_ST.includes(o.status)?'':`<option value="${esc(o.status)}" selected>${esc(o.status)}</option>`}</select></label>
     <label class="field"><span>Técnico que realiza la reparación</span><select id="od-tech"><option value="">Sin asignar</option>${TECHS.map(t=>`<option value="${esc(t.id)}" ${t.id===o.techId?'selected':''}>${esc(t.name)}</option>`).join('')}${o.techId&&!inList?`<option value="${esc(o.techId)}" selected>${esc(o.techName||'Técnico')} (ya no está en la lista)</option>`:''}</select></label>
+    ${o.techId&&o.taskUrl?`<div class="od-link full"><div><b>Link de la tarea para el técnico</b><span>${esc(o.taskUrl)}</span></div><button type="button" class="btn btn-soft" id="od-copy">Copiar link</button></div>`:'<p class="od-note full">Al guardar con un técnico asignado se genera el link de la tarea para que la acepte.</p>'}
     <label class="field"><span>Fecha de inicio del servicio</span><input id="od-start" type="date" value="${esc(o.startDate||'')}"></label>
     <label class="field"><span>Fecha de fin</span><input id="od-end" type="date" value="${esc(o.endDate||'')}"></label>
     <label class="field full"><span>Trabajo realizado en la máquina</span><textarea id="od-work" rows="4" maxlength="3000" placeholder="Ej.: limpieza interna, cambio de pasta térmica, reinstalación de Windows…">${esc(o.workDone||'')}</textarea></label>
@@ -1288,7 +1330,7 @@ function techMsg(o,f,t){
   if(o.detalle) L.push('',`Detalle del cliente: ${o.detalle}`);
   if(f.startDate||f.endDate) L.push('',`Inicio: ${fDate(f.startDate)} · Fin: ${fDate(f.endDate)}`);
   if(f.obs) L.push('',`Observaciones: ${f.obs}`);
-  L.push('','Avisame si podés tomarlo.');
+  if(o.taskUrl) L.push('','Entrá y aceptá la tarea:',o.taskUrl); else L.push('','Avisame si podés tomarlo.');
   return L.join('\n');
 }
 async function saveOd(extra={}){
@@ -1296,6 +1338,7 @@ async function saveOd(extra={}){
   const i=ORDERS.findIndex(x=>x.id===order.id); if(i>=0) ORDERS[i]=order; odCur=order; return order;
 }
 $('#od-body').addEventListener('change',e=>{ if(e.target.id==='od-tech') updDlgBtns(); });
+$('#od-body').addEventListener('click',e=>{ if(e.target.closest('#od-copy')) navigator.clipboard.writeText(odCur.taskUrl||'').then(()=>toast('Link copiado'),()=>toast('Copiá el link a mano')); });
 $('#od-save').onclick=async()=>{
   const b=$('#od-save'); b.disabled=true; $('#od-err').textContent='';
   try{ await saveOd(); renderOrders(); renderDlg(); toast('Pedido guardado'); }
@@ -1352,6 +1395,54 @@ $('#tech-list').addEventListener('click',async e=>{
     catch(err){ if(err.status===401) return sessionLost(); toast(err.message); }
   }
 });
+/* ---------- página de la tarea del técnico (/t/<pedido>?k=clave) ---------- */
+let TK=null;
+const tkId=()=>{ const m=location.pathname.match(/^\/t\/([^/]+)\/?$/); return m?decodeURIComponent(m[1]):null; };
+const tkKey=()=>new URLSearchParams(location.search).get('k')||'';
+async function renderTarea(){
+  document.title='Tarea asignada · Puente Service';
+  const box=$('#tk-body'); box.innerHTML='<div class="empty" style="box-shadow:none">Cargando la tarea…</div>';
+  try{ TK=(await api('/api/task?id='+encodeURIComponent(tkId())+'&k='+encodeURIComponent(tkKey()))).task; drawTarea(); }
+  catch(e){ box.innerHTML=`<div class="empty" style="box-shadow:none">${esc(e.message)}</div>`; }
+}
+async function tkAnswer(action,btn){
+  if(action==='decline' && !confirm('¿Seguro que no podés tomar esta tarea?')) return;
+  btn.disabled=true;
+  try{ TK=(await api('/api/task',{method:'POST',body:JSON.stringify({id:tkId(),k:tkKey(),action})})).task; drawTarea(); window.scrollTo(0,0); }
+  catch(e){ btn.disabled=false; toast(e.message); }
+}
+function drawTarea(){
+  const t=TK, first=(t.name||'').split(' ')[0], tech=(t.techName||'').split(' ')[0];
+  const tel=t.phone?`tel:+${waNum(t.phone)}`:'';
+  let h;
+  if(t.response==='aceptada'){
+    h=`<div class="tk-ok"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Aceptada"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+      <h1 class="tk-name tk-center">Tarea aceptada</h1>
+      <p class="tk-center" style="margin:0;color:var(--ink-2)">Gracias, ${esc(tech)}. Avisamos a Puente Service que tomaste el pedido ${esc(t.id)}.</p>
+      <div class="tk-card"><h3>Seguimiento</h3><div><b>Aceptada · ${fStamp(t.respondedAt)}</b></div></div>
+      ${t.phone?`<a class="btn btn-primary tk-btn" href="${tel}">Llamar al cliente</a><a class="btn tk-btn tk-out" href="${esc(waLink(t.phone,`Hola ${first}, soy ${t.techName} de Puente Service. Me voy a ocupar de tu pedido ${t.id}.`))}" target="_blank" rel="noopener">Escribirle por WhatsApp</a>`:''}
+      <button class="btn tk-btn tk-ghost" data-ans="decline">No puedo tomarla</button>`;
+  } else if(t.response==='rechazada'){
+    h=`<h1 class="tk-name tk-center" style="margin-top:24px">Avisamos que no podés tomarla</h1>
+      <p class="tk-center" style="margin:0;color:var(--ink-2)">Respondiste el ${fStamp(t.respondedAt)}. Si cambiás de opinión, podés aceptarla ahora.</p>
+      <button class="btn btn-primary tk-btn" data-ans="accept">Aceptar tarea</button>`;
+  } else {
+    h=`<div><div class="tk-eyebrow">Tarea asignada a</div><h1 class="tk-name">${esc(t.techName||'Técnico')}</h1></div>
+      <div class="tk-card"><div class="tk-row"><div><div class="tk-eyebrow">Pedido</div><b>${esc(t.id)}</b></div><span class="st st-pendiente">Sin aceptar</span></div></div>
+      <div class="tk-card"><h3>Cliente</h3><b>${esc(t.name||'—')}</b>
+        ${t.phone?`<div class="tk-row"><span>${esc(fmtPhone(t.phone))}</span><a class="btn tk-btn tk-out" style="min-height:44px" href="${tel}">Llamar</a></div>`:''}
+        ${t.address?`<div>${esc(t.address)}</div>`:''}
+        <div style="color:var(--ink-2);font-size:13.5px">${t.home?'Servicio a domicilio':'Se entrega el equipo en el taller'}</div>
+        ${t.home&&t.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(t.address+', Comodoro Rivadavia')}" target="_blank" rel="noopener" style="font-weight:600">Cómo llegar</a>`:''}</div>
+      <div class="tk-card"><h3>Falla y servicios</h3>${t.lines.map(l=>`<div>${esc(l.title)}${l.quantity>1?' ×'+l.quantity:''}</div>`).join('')}${t.detalle?`<div style="font-style:italic;color:var(--ink-2)">“${esc(t.detalle)}”</div>`:''}</div>
+      <button class="btn btn-primary tk-btn" style="min-height:56px;font-size:18px;margin-top:6px" data-ans="accept">Aceptar tarea</button>
+      <button class="btn tk-btn tk-out" data-ans="decline">No puedo tomarla</button>
+      <div class="tk-center" style="font-size:12.5px;color:var(--ink-2)">Este link es personal. No hace falta usuario ni contraseña.</div>`;
+  }
+  $('#tk-body').innerHTML=h;
+}
+$('#tk-body').addEventListener('click',e=>{ const b=e.target.closest('button[data-ans]'); if(b) tkAnswer(b.dataset.ans,b); });
+
 function renderRows(){
   $('#a-body').innerHTML=aVisible().map(d=>{
     const o=byId(d.id), op=o?.price, ch=!o||op!==d.price||o.active!==d.active;
