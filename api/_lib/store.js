@@ -1,6 +1,7 @@
 import { get, put, list, del } from '@vercel/blob';
 import crypto from 'node:crypto';
 import seed from '../../data/seed.js';
+import { withCombos } from '../../data/combos.js';
 
 const CATALOG = 'db/catalog.json';
 const OPTS = { access: 'private', contentType: 'application/json', addRandomSuffix: false, allowOverwrite: true, cacheControlMaxAge: 60 };
@@ -20,11 +21,11 @@ async function writeJSON(pathname, data) {
 export const fail = (e) => json({ error: e.message || 'Error del servidor' }, e.status || 500);
 
 export async function getCatalog() {
-  try { const db = await readJSON(CATALOG); if (db && Array.isArray(db.items)) return db; } catch (e) { console.error('catalog read', e); }
-  return structuredClone(seed);
+  try { const db = await readJSON(CATALOG); if (db && Array.isArray(db.items)) return withCombos(db); } catch (e) { console.error('catalog read', e); }
+  return withCombos(structuredClone(seed));
 }
 export async function saveCatalog(db) { db.updatedAt = new Date().toISOString(); await writeJSON(CATALOG, db); return db; }
-export const seedCatalog = () => structuredClone(seed);
+export const seedCatalog = () => withCombos(structuredClone(seed));
 
 export async function saveOrder(order) { await writeJSON(`orders/${order.id}.json`, order); return order; }
 export async function getOrder(id) { return readJSON(`orders/${id}.json`); }
